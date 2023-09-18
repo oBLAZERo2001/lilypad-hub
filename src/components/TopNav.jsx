@@ -1,8 +1,10 @@
 import { Box, Divider, IconButton, InputBase, Paper } from "@mui/material";
 
 import { AiOutlineSearch } from "react-icons/ai";
+import { useNavigate } from "react-router";
 
 export default function TopNav() {
+	const navigate = useNavigate();
 	return (
 		<Box>
 			<Box
@@ -39,7 +41,14 @@ export default function TopNav() {
 						alignItems: "center",
 					}}
 				>
-					<Box sx={RightNavs}>Explore</Box>
+					<Box
+						sx={RightNavs}
+						onClick={() => {
+							navigate("/explore");
+						}}
+					>
+						Explore
+					</Box>
 				</Box>
 			</Box>
 		</Box>
