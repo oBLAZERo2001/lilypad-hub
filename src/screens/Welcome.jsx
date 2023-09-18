@@ -14,29 +14,26 @@ export default function Welcome() {
 					backgroundSize: "cover",
 					backgroundPosition: "top",
 					backgroundRepeat: "no-repeat",
+
+					textSizeAdjust: "100%",
+					WebkitFontSmoothing: "antialiased",
 				}}
 			>
+				{/*  left landing text */}
 				<Box
 					sx={{
 						pt: "10vh",
 						px: "10vw",
 						display: "flex",
-						// alignItems: "center",
 						justifyContent: "space-between",
 					}}
 				>
-					<Box>
+					<Box sx={LandingBox}>
 						<Box
 							sx={{
-								textSizeAdjust: "100%",
-								letterSpacing: "0.02em",
-								fontFamily: "Roboto, system-ui, sans-serif",
-								boxSizing: "inherit",
-								paddingTop: "160px",
+								paddingTop: "120px",
 								maxWidth: "486px",
-								color: "#ffffff",
 								fontSize: "44px",
-								fontWeight: "bold",
 								lineHeight: "46px",
 							}}
 						>
@@ -44,14 +41,8 @@ export default function Welcome() {
 						</Box>
 						<Box
 							sx={{
-								textSizeAdjust: "100%",
-								letterSpacing: "0.02em",
-								fontFamily: "Roboto, system-ui, sans-serif",
-								boxSizing: "inherit",
 								fontSize: "14px",
 								lineHeight: "20px",
-								color: "#ffffff",
-								fontWeight: "bold",
 								maxWidth: "400px",
 								marginTop: "28px",
 							}}
@@ -63,13 +54,46 @@ export default function Welcome() {
 
 					{/* form box */}
 					<Box sx={FormBox}>
+						<Box
+							sx={{
+								color: "rgb(0, 0, 0)",
+								boxSizing: "inherit",
+								margin: "0px",
+								fontSize: "2rem",
+								fontWeight: 500,
+								letterSpacing: "0px",
+								lineHeight: 1.143,
+								fontFamily: "Roboto, system-ui, sans-serif",
+								textAlign: "left",
+
+								mb: 2,
+							}}
+						>
+							Lilypad Hub welcomes you
+						</Box>
+						<Box
+							sx={{
+								color: "rgb(0, 0, 0)",
+								boxSizing: "inherit",
+								margin: "0px",
+								fontSize: "1.143rem",
+								fontWeight: 500,
+								letterSpacing: "0px",
+								lineHeight: 1.25,
+								fontFamily: "Roboto, system-ui, sans-serif",
+
+								mb: 2,
+							}}
+						>
+							Sign in
+						</Box>
 						<FormControl fullWidth>
 							<TextField placeholder="User Name" size="small" />
 						</FormControl>
 						<Box sx={{ ...ButtonStyle, backgroundColor: "#4caf50", my: 2 }}>
 							Connect Wallet
 						</Box>
-						<Box sx={ButtonStyle}> Sign In</Box>
+						<Box sx={ButtonStyle}>Sign In</Box>
 					</Box>
 				</Box>
 			</Box>
@@ -79,8 +103,15 @@ export default function Welcome() {
 
 // stylers`
 
+const LandingBox = {
+	letterSpacing: "0.02em",
+	fontFamily: "Roboto, system-ui, sans-serif",
+	boxSizing: "inherit",
+	color: "#ffffff",
+	fontWeight: "bold",
+};
+
 const FormBox = {
-	textsizeadjust: '"100%"',
 	fontSize: "1rem",
 	fontWeight: 400,
 	letterSpacing: "0.02em",
@@ -99,8 +130,6 @@ const FormBox = {
 };
 
 const ButtonStyle = {
-	WebkitFontSmoothing: "antialiased",
-	textSizeAdjust: "100%",
 	font: "inherit",
 	overflow: "visible",
 	display: "inline-flex",
