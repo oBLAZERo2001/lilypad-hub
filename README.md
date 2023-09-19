@@ -1,3 +1,3 @@
 # Getting Started with lilypad-hub
 
-Let's hack
+Let's hack!
