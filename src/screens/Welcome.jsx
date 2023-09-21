@@ -1,10 +1,20 @@
-import { Box, Checkbox, FormControl, TextField } from "@mui/material";
+import {
+	Box,
+	Checkbox,
+	CircularProgress,
+	FormControl,
+	TextField,
+} from "@mui/material";
 import React, { useState } from "react";
 import UseWallet from "../hooks/useWallet";
+import { useNavigate } from "react-router-dom";
 
 export default function Welcome() {
+	const navigate = useNavigate();
 	const { connectSite, signUser, connectedToWallet } = UseWallet();
 	const [displayName, setDisplayName] = useState();
+	const [signLoading, setSignLoading] = useState(false);
+	const [nameRequired, setNameRequired] = useState(false);
 
 	return (
 		<Box
@@ -81,8 +91,10 @@ export default function Welcome() {
 						size="small"
 						value={displayName}
 						onChange={(e) => {
+							setNameRequired(false);
 							setDisplayName(e.target.value);
 						}}
+						error={nameRequired}
 					/>
 				</FormControl>
 				{!connectedToWallet && (
@@ -107,11 +119,18 @@ export default function Welcome() {
 				{connectedToWallet && (
 					<Box
 						sx={{ ...ButtonStyle, backgroundColor: "#4caf50", my: 1 }}
-						onClick={() => {
-							if (displayName) signUser(displayName);
+						onClick={async () => {
+							if (displayName) {
+								setSignLoading(true);
+								const status = await signUser(displayName);
+								setSignLoading(false);
+								navigate("/explore");
+							} else {
+								setNameRequired(true);
+							}
 						}}
 					>
-						Sign In
+						{signLoading ? <CircularProgress /> : "Sign In"}
 					</Box>
 				)}
 			</Box>

@@ -32,10 +32,17 @@ export const createUser = async function (address, displayName) {
 			console.log(response.data);
 			localStorage.setItem("token", response.data.token);
 
-			return response.data;
+			return {
+				ok: true,
+				data: response.data,
+			};
 		}
 	} catch (error) {
 		console.log(error.message);
+		return {
+			ok: false,
+			error,
+		};
 	}
 };
 
