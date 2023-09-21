@@ -25,8 +25,8 @@ export async function connectWalletToSite() {
 }
 
 export async function switchChain() {
-	const config = { ...ChainsConfig["SHARDEUM_BETA"] };
-	config.chainId = Web3.utils.toHex(ChainsConfig["SHARDEUM_BETA"].chainId);
+	const config = { ...ChainsConfig["POLYGON_TESTNET"] };
+	config.chainId = Web3.utils.toHex(ChainsConfig["POLYGON_TESTNET"].chainId);
 
 	try {
 		await window.ethereum.request({

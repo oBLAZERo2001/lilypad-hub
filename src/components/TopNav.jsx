@@ -41,19 +41,32 @@ export default function TopNav() {
 						alignItems: "center",
 					}}
 				>
-					<Box
-						sx={RightNavs}
-						onClick={() => {
-							navigate("/explore");
-						}}
-					>
-						Explore
-					</Box>
+					{Options.map(({ name, link }) => (
+						<Box
+							sx={RightNavs}
+							onClick={() => {
+								navigate(link);
+							}}
+						>
+							{name}
+						</Box>
+					))}
 				</Box>
 			</Box>
 		</Box>
 	);
 }
+
+const Options = [
+	{
+		name: "Lilypad Dashboard",
+		link: "/lilypad",
+	},
+	{
+		name: "Explore",
+		link: "/explore",
+	},
+];
 
 const Name = () => {
 	return (

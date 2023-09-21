@@ -1,7 +1,21 @@
-import { Box, FormControl, TextField } from "@mui/material";
-import React from "react";
+import {
+	Box,
+	Checkbox,
+	CircularProgress,
+	FormControl,
+	TextField,
+} from "@mui/material";
+import React, { useState } from "react";
+import UseWallet from "../hooks/useWallet";
+import { useNavigate } from "react-router-dom";
 
 export default function Welcome() {
+	const navigate = useNavigate();
+	const { connectSite, signUser, connectedToWallet } = UseWallet();
+	const [displayName, setDisplayName] = useState();
+	const [signLoading, setSignLoading] = useState(false);
+	const [nameRequired, setNameRequired] = useState(false);
+
 	return (
 		<Box
 			sx={{
@@ -71,13 +85,54 @@ export default function Welcome() {
 				>
 					Sign in
 				</Box>
-				<FormControl fullWidth>
-					<TextField placeholder="User Name" size="small" />
+				<FormControl fullWidth sx={{ mb: 1 }}>
+					<TextField
+						placeholder="User Name"
+						size="small"
+						value={displayName}
+						onChange={(e) => {
+							setNameRequired(false);
+							setDisplayName(e.target.value);
+						}}
+						error={nameRequired}
+					/>
 				</FormControl>
-				<Box sx={{ ...ButtonStyle, backgroundColor: "#4caf50", my: 2 }}>
-					Connect Wallet
+				{!connectedToWallet && (
+					<Box
+						sx={{ ...ButtonStyle, backgroundColor: "#4caf50", my: 1 }}
+						onClick={connectSite}
+					>
+						Connect Wallet
+					</Box>
+				)}
+				<Box sx={{ alignContent: "center" }}>
+					<Checkbox
+						checked={connectedToWallet}
+						// disabled
+						onClick={() => {}}
+						sx={{ p: 0.5, cursor: "default" }}
+						color={connectedToWallet ? "success" : "primary"}
+					/>
+
+					{!connectedToWallet ? "Please connect wallet" : "Connected to wallet"}
 				</Box>
-				<Box sx={ButtonStyle}>Sign In</Box>
+				{connectedToWallet && (
+					<Box
+						sx={{ ...ButtonStyle, backgroundColor: "#4caf50", my: 1 }}
+						onClick={async () => {
+							if (displayName) {
+								setSignLoading(true);
+								const status = await signUser(displayName);
+								setSignLoading(false);
+								navigate("/explore");
+							} else {
+								setNameRequired(true);
+							}
+						}}
+					>
+						{signLoading ? <CircularProgress /> : "Sign In"}
+					</Box>
+				)}
 			</Box>
 		</Box>
 	);

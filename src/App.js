@@ -5,6 +5,7 @@ import { Route } from "react-router-dom/dist";
 import Welcome from "./screens/Welcome";
 import Explore from "./screens/Explore";
 import { RoutePageLayout } from "./router/RoutePageLayout";
+import { Lilypad } from "./screens/Lilypad";
 
 function App() {
 	return (
@@ -14,6 +15,7 @@ function App() {
 				<Route element={<RoutePageLayout />}>
 					<Route path="welcome" exact element={<Welcome />} />
 					<Route path="Explore" exact element={<Explore />} />
+					<Route path="lilypad" exact element={<Lilypad />} />
 				</Route>
 			</Routes>
 		</Router>

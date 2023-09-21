@@ -1,13 +1,6 @@
 export const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 export const ChainsConfig = {
-	NEO_TESTENT: {
-		chainId: 3141,
-		chainName: "Neo testnet",
-		nativeCurrency: { name: "Neo", symbol: "NEO", decimals: 18 },
-		rpcUrls: ["https://filecoin-hyperspace.chainup.net/rpc/v1"],
-		blockExplorerUrls: ["https://hyperspace.filfox.info/en"],
-	},
 	POLYGON_TESTNET: {
 		chainId: 80001,
 		rpcUrls: ["https://matic-mumbai.chainstacklabs.com"],
@@ -18,5 +11,8 @@ export const ChainsConfig = {
 			decimals: 18,
 		},
 		blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
+		contract_address: "0xFC9206c15Be795cde60ae5E419b26ecad4EBaf5e",
 	},
 };
+
+export const CHAIN = ChainsConfig[process.env.REACT_APP_CHAIN];

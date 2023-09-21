@@ -31,6 +31,7 @@ export const RoutePageLayout = ({ children }) => {
 
 					textSizeAdjust: "100%",
 					WebkitFontSmoothing: "antialiased",
+					px: "10vw",
 				}}
 			>
 				<TopNav />
