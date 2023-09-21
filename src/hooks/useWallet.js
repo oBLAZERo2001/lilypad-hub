@@ -23,11 +23,14 @@ export default function UseWallet() {
 
 		if (address && address !== "") {
 			let token = localStorage.getItem("token");
+			console.log("token check", token);
+
 			localStorage.setItem("address", address);
 			if (!token || token === "" || token === "undefined") {
 				await createUser(address, displayName);
 			}
 			token = localStorage.getItem("token");
+			console.log("token check", token);
 			if (token && token !== "" && token !== "undefined") {
 				setConnectedToSite(true);
 				console.log("Signed user");

@@ -2,6 +2,7 @@ import { default as axios } from "axios";
 import { SERVER_URL } from "../constants";
 
 export const createUser = async function (address, displayName) {
+	console.log("reached create user api");
 	try {
 		const nonceResponse = await axios.post(
 			`${SERVER_URL}/user/generateNonce`,
@@ -28,7 +29,7 @@ export const createUser = async function (address, displayName) {
 				},
 			}
 		);
-		if (response.status === 200) {
+		if (response.status === 200 || response.status === 201) {
 			console.log(response.data);
 			localStorage.setItem("token", response.data.token);
 
