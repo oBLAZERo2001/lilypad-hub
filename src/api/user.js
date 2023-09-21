@@ -1,16 +1,27 @@
 import { default as axios } from "axios";
 import { SERVER_URL } from "../constants";
 
-export const createUser = async function (address) {
+export const createUser = async function (address, displayName) {
 	try {
+		const nonceResponse = await axios.post(
+			`${SERVER_URL}/user/generateNonce`,
+			{ address },
+			{
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+			}
+		);
+		const formattedNonceResponse = nonceResponse.data;
+		const nonce = formattedNonceResponse.nonce;
+
 		const sign = await window.ethereum.request({
 			method: "personal_sign",
-			params: [address, "Please approve this message."],
+			params: [address, "Please approve this message \n \nNonce:\n" + nonce],
 		});
 
 		const response = await axios.post(
-			SERVER_URL + "/user/login",
-			{ sign },
+			SERVER_URL + "/user/signin",
+			{ sign, nonce, displayName },
 			{
 				headers: {
 					"Content-Type": `application/json`,
