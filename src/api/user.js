@@ -47,7 +47,7 @@ export const createUser = async function (address, displayName) {
 	}
 };
 
-export const getUser = async function (address) {
+export const getUserWithAddress = async function (address) {
 	try {
 		const response = await axios.get(SERVER_URL + "/user/" + address);
 		if (response.status === 200) {
@@ -58,28 +58,18 @@ export const getUser = async function (address) {
 	}
 };
 
-export const addCredits = async function () {
+export const getUser = async function () {
 	try {
 		let token = localStorage.getItem("token");
-
-		const response = await axios
-			.post(
-				SERVER_URL + "/user/addcredits",
-				{ credits: 5 },
-				{
-					headers: {
-						"Content-Type": `application/json`,
-						Authorization: "Bearer " + token,
-					},
-				}
-			)
-			.catch((er) => {
-				alert(er.response.data.message);
-			});
+		const response = await axios.get(SERVER_URL + "/user", {
+			headers: {
+				Authorization: "Bearer " + token,
+			},
+		});
 		if (response.status === 200) {
 			return response.data;
 		}
 	} catch (error) {
-		console.log(error.message);
+		console.log("user", error.message);
 	}
 };
