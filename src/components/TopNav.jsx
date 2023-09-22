@@ -1,7 +1,9 @@
 import { Box, Divider, IconButton, InputBase, Paper } from "@mui/material";
+import { useState } from "react";
 
 import { AiOutlineSearch } from "react-icons/ai";
 import { useNavigate } from "react-router";
+import { useSearchParams } from "react-router-dom";
 
 export default function TopNav() {
 	const navigate = useNavigate();
@@ -104,6 +106,10 @@ const Name = () => {
 };
 
 const SearchInputBase = () => {
+	const [searchName, setSearchName] = useState("");
+
+	const [searchParams, setSearchParams] = useSearchParams();
+
 	return (
 		<Paper
 			component="form"
@@ -124,6 +130,13 @@ const SearchInputBase = () => {
 				placeholder="Search Lilypad Hub"
 				inputProps={{ "aria-label": "search lilypad hub" }}
 				size="small"
+				value={searchName}
+				onChange={(e) => {
+					setSearchName(e.target.value);
+					setSearchParams({
+						name: e.target.value,
+					});
+				}}
 			/>
 		</Paper>
 	);
