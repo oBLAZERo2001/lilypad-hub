@@ -67,7 +67,26 @@ export const cloneTemplate = async function (data) {
 		console.log(error.message);
 	}
 };
-
+export const updateTemplate = async function (data) {
+	try {
+		let token = localStorage.getItem("token");
+		const response = await axios.patch(
+			SERVER_URL + "/template/updateTemplate",
+			data,
+			{
+				headers: {
+					"Content-Type": `application/json`,
+					Authorization: "Bearer " + token,
+				},
+			}
+		);
+		if (response.status === 200) {
+			return response.data;
+		}
+	} catch (error) {
+		console.log(error.message);
+	}
+};
 export const getPublicTemplates = async function (searchName) {
 	try {
 		let token = localStorage.getItem("token");

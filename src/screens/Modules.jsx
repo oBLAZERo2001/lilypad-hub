@@ -1,6 +1,7 @@
 import {
 	Avatar,
 	Box,
+	Chip,
 	IconButton,
 	ListItem,
 	ListItemAvatar,
@@ -15,6 +16,8 @@ import {
 } from "react-icons/ai";
 import { deleteTemplate, getTemplates } from "../api/template";
 import { Link } from "react-router-dom";
+import { MdOutlineDeleteOutline } from "react-icons/md";
+import { EditModelDialog } from "../components/EditModelDialog";
 
 const {
 	Spec,
@@ -26,7 +29,9 @@ const {
 
 export default function Modules() {
 	const [modules, setModules] = useState();
-	const [template, editTemplate] = useState([]);
+	// const [template, editTemplate] = useState([]);
+	const [open, setOpen] = useState(false);
+	const [editModel, seteditModel] = useState({});
 
 	async function gM() {
 		const resp = await getTemplates();
@@ -61,12 +66,32 @@ export default function Modules() {
 							<ListItem
 								secondaryAction={
 									m._id !== 0 && (
-										<Box>
+										<Box
+											sx={{
+												display: "flex",
+												alignItems: "center",
+											}}
+										>
+											<Box
+												sx={{
+													pr: 3,
+												}}
+											>
+												<Chip
+													label={m.visibility}
+													sx={{
+														borderRadius: "3px",
+														color: "#f1f1f1",
+														fontSize: "14px",
+													}}
+												/>
+											</Box>
 											<IconButton
 												edge="end"
 												aria-label="edit"
 												onClick={async () => {
-													editTemplate(m);
+													setOpen(true);
+													seteditModel(m);
 												}}
 												sx={{
 													mr: 2,
@@ -84,7 +109,7 @@ export default function Modules() {
 												}}
 												color="error"
 											>
-												<AiOutlineDelete />
+												<MdOutlineDeleteOutline />
 											</IconButton>
 										</Box>
 									)
@@ -108,6 +133,7 @@ export default function Modules() {
 						);
 					})}
 			</Box>
+			<EditModelDialog open={open} setOpen={setOpen} model={editModel} />
 		</Box>
 	);
 }

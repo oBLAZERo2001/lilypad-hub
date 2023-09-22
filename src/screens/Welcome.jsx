@@ -5,12 +5,13 @@ import {
 	FormControl,
 	TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UseWallet from "../hooks/useWallet";
 import { useNavigate } from "react-router-dom";
 import { PrimaryColor } from "../constants";
 import BgImage from "../assets/bgimage.png";
 import Logo from "../assets/logo.png";
+import { getUser } from "../api/user";
 
 export default function Welcome() {
 	const navigate = useNavigate();
@@ -18,6 +19,24 @@ export default function Welcome() {
 	const [displayName, setDisplayName] = useState();
 	const [signLoading, setSignLoading] = useState(false);
 	const [nameRequired, setNameRequired] = useState(false);
+
+	async function handleGetUser() {
+		try {
+			const user = await getUser();
+			if (user) {
+				navigate("/");
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
+	useEffect(() => {
+		const token = localStorage.getItem("token");
+		if (token && token !== "" && token !== "undefined") {
+			handleGetUser();
+		}
+	}, []);
 
 	return (
 		<Box
@@ -164,7 +183,7 @@ export default function Welcome() {
 										setSignLoading(true);
 										await signUser(displayName);
 										setSignLoading(false);
-										navigate("/explore");
+										navigate("/");
 									} else {
 										setNameRequired(true);
 									}

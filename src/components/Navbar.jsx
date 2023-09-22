@@ -95,7 +95,7 @@ export const Navbar = ({ disableSearch = false }) => {
 					}}
 				>
 					<Box className="navlist">
-						<p onClick={() => navigate("/explore")}>Explore</p>
+						<p onClick={() => navigate("/")}>Explore</p>
 						<p
 							onClick={() =>
 								window.open(
