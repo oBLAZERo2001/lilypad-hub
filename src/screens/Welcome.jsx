@@ -8,6 +8,9 @@ import {
 import React, { useState } from "react";
 import UseWallet from "../hooks/useWallet";
 import { useNavigate } from "react-router-dom";
+import { PrimaryColor } from "../constants";
+import BgImage from "../assets/bgimage.png";
+import Logo from "../assets/logo.png";
 
 export default function Welcome() {
 	const navigate = useNavigate();
@@ -19,120 +22,161 @@ export default function Welcome() {
 	return (
 		<Box
 			sx={{
-				pt: "10vh",
+				height: "100vh",
+				bgcolor: "#ffc000",
 				display: "flex",
-				justifyContent: "space-between",
+				justifyContent: "center",
+				position: "relative",
 			}}
 		>
-			{/*  left landing text */}
-
-			<Box sx={LandingBox}>
+			<Box
+				sx={{
+					backgroundImage: `url(${BgImage})`,
+					height: "100vh",
+					width: "100vw",
+					position: "absolute",
+					backgroundPosition: "center",
+					backgroundRepeat: "no-repeat",
+					zIndex: 1,
+				}}
+			/>
+			<Box
+				sx={{
+					display: "flex",
+					flexDirection: "column",
+					width: "100%",
+					maxWidth: "1080px",
+				}}
+			>
 				<Box
+					onClick={() => {
+						navigate("/");
+					}}
 					sx={{
-						paddingTop: "120px",
-						maxWidth: "486px",
-						fontSize: "44px",
-						lineHeight: "46px",
+						cursor: "pointer",
+						display: "flex",
+						alignItems: "center",
+						mt: 4,
 					}}
 				>
-					Build and Ship any Application Anywhere
+					<img src={Logo} alt="logo-img" height={"40px"} />
 				</Box>
 				<Box
 					sx={{
-						fontSize: "14px",
-						lineHeight: "20px",
-						maxWidth: "400px",
-						marginTop: "28px",
+						display: "flex",
+						justifyContent: "space-between",
+						alignItems: "center",
+						height: "100%",
+						zIndex: 2,
+						mb: 4,
 					}}
 				>
-					Lilypad Hub is the world's easiest way to create, manage, and deliver
-					your team's container applications.
-				</Box>
-			</Box>
-
-			{/* form box */}
-			<Box sx={FormBox}>
-				<Box
-					sx={{
-						color: "rgb(0, 0, 0)",
-						boxSizing: "inherit",
-						margin: "0px",
-						fontSize: "2rem",
-						fontWeight: 500,
-						letterSpacing: "0px",
-						lineHeight: 1.143,
-						fontFamily: "Roboto, system-ui, sans-serif",
-						textAlign: "left",
-
-						mb: 2,
-					}}
-				>
-					Lilypad Hub welcomes you
-				</Box>
-				<Box
-					sx={{
-						color: "rgb(0, 0, 0)",
-						boxSizing: "inherit",
-						margin: "0px",
-						fontSize: "1.143rem",
-						fontWeight: 500,
-						letterSpacing: "0px",
-						lineHeight: 1.25,
-						fontFamily: "Roboto, system-ui, sans-serif",
-
-						mb: 2,
-					}}
-				>
-					Sign in
-				</Box>
-				<FormControl fullWidth sx={{ mb: 1 }}>
-					<TextField
-						placeholder="User Name"
-						size="small"
-						value={displayName}
-						onChange={(e) => {
-							setNameRequired(false);
-							setDisplayName(e.target.value);
-						}}
-						error={nameRequired}
-					/>
-				</FormControl>
-				{!connectedToWallet && (
-					<Box
-						sx={{ ...ButtonStyle, backgroundColor: "#4caf50", my: 1 }}
-						onClick={connectSite}
-					>
-						Connect Wallet
+					{/*  left landing text */}
+					<Box sx={LandingBox}>
+						<Box
+							sx={{
+								maxWidth: "486px",
+								fontSize: "44px",
+								lineHeight: "46px",
+							}}
+						>
+							Build, Test and Ship modules at ease!
+						</Box>
+						<Box
+							sx={{
+								fontSize: "14px",
+								lineHeight: "20px",
+								maxWidth: "400px",
+								marginTop: "28px",
+							}}
+						>
+							Lilypad Hub is the world's easiest way to create, manage, and
+							publish your modules to the world for the open data economy.
+						</Box>
 					</Box>
-				)}
-				<Box sx={{ alignContent: "center" }}>
-					<Checkbox
-						checked={connectedToWallet}
-						// disabled
-						onClick={() => {}}
-						sx={{ p: 0.5, cursor: "default" }}
-						color={connectedToWallet ? "success" : "primary"}
-					/>
 
-					{!connectedToWallet ? "Please connect wallet" : "Connected to wallet"}
-				</Box>
-				{connectedToWallet && (
-					<Box
-						sx={{ ...ButtonStyle, backgroundColor: "#4caf50", my: 1 }}
-						onClick={async () => {
-							if (displayName) {
-								setSignLoading(true);
-								const status = await signUser(displayName);
-								setSignLoading(false);
-								navigate("/explore");
-							} else {
-								setNameRequired(true);
-							}
-						}}
-					>
-						{signLoading ? <CircularProgress /> : "Sign In"}
+					{/* form box */}
+					<Box sx={FormBox}>
+						<Box
+							sx={{
+								fontSize: "2rem",
+								fontWeight: 600,
+								letterSpacing: "0px",
+								textAlign: "left",
+							}}
+						>
+							Create your account✨
+						</Box>
+						<Box
+							sx={{
+								margin: "0px",
+								fontWeight: 500,
+								letterSpacing: "0px",
+								mb: 2,
+							}}
+						>
+							Connect wallet and sign in🪧
+						</Box>
+						<FormControl fullWidth sx={{ mb: 1 }}>
+							<TextField
+								placeholder="User Name"
+								size="small"
+								value={displayName}
+								onChange={(e) => {
+									setNameRequired(false);
+									setDisplayName(e.target.value);
+								}}
+								error={nameRequired}
+							/>
+						</FormControl>
+						<Box
+							sx={{
+								textAlign: "start",
+							}}
+						>
+							<Box sx={{ alignContent: "center" }}>
+								<Checkbox
+									checked={connectedToWallet}
+									// disabled
+									onClick={() => {}}
+									sx={{ p: 0.5, cursor: "default" }}
+									color={connectedToWallet ? "warning" : "primary"}
+								/>
+
+								{!connectedToWallet
+									? "Please connect wallet"
+									: "Connected to wallet"}
+							</Box>
+							{!connectedToWallet && (
+								<Box
+									sx={{ ...ButtonStyle, backgroundColor: PrimaryColor, my: 1 }}
+									onClick={connectSite}
+								>
+									Connect Wallet
+								</Box>
+							)}
+						</Box>
+						{connectedToWallet && (
+							<Box
+								sx={{ ...ButtonStyle, backgroundColor: PrimaryColor, my: 1 }}
+								onClick={async () => {
+									if (displayName) {
+										setSignLoading(true);
+										await signUser(displayName);
+										setSignLoading(false);
+										navigate("/explore");
+									} else {
+										setNameRequired(true);
+									}
+								}}
+							>
+								{signLoading ? <CircularProgress /> : "Sign In"}
+							</Box>
+						)}
 					</Box>
-				)}
+				</Box>
+
+				<Box />
 			</Box>
 		</Box>
 	);
@@ -142,18 +186,16 @@ export default function Welcome() {
 
 const LandingBox = {
 	letterSpacing: "0.02em",
-	fontFamily: "Roboto, system-ui, sans-serif",
 	boxSizing: "inherit",
-	color: "#ffffff",
+	color: "#000",
 	fontWeight: "bold",
 };
 
 const FormBox = {
 	fontSize: "1rem",
 	fontWeight: 400,
+	borderRadius: "8px",
 	letterSpacing: "0.02em",
-	lineHeight: 1.429,
-	fontFamily: "Roboto, system-ui, sans-serif",
 	boxSizing: "inherit",
 	backgroundColor: "rgb(255, 255, 255)",
 	color: "rgb(0, 0, 0)",
@@ -164,10 +206,10 @@ const FormBox = {
 	overflow: "hidden",
 	padding: "32px 40px",
 	minWidth: "470px",
+	textAlign: "center",
 };
 
 const ButtonStyle = {
-	font: "inherit",
 	overflow: "visible",
 	display: "inline-flex",
 	WebkitBoxAlign: "center",
@@ -185,14 +227,11 @@ const ButtonStyle = {
 	verticalAlign: "middle",
 	appearance: "none",
 	textDecoration: "none",
-	fontFamily: "Roboto, system-ui, sans-serif",
 	fontWeight: 500,
 	fontSize: "1rem",
-	lineHeight: 1.75,
 	borderRadius: "4px",
 	transition:
 		"background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
-	color: "rgb(255, 255, 255)",
 	backgroundColor: "rgb(8, 109, 215)",
 	width: "100%",
 	boxShadow: "none",
