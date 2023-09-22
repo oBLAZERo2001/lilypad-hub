@@ -61,12 +61,16 @@ export default function TopNav() {
 
 const Options = [
 	{
-		name: "Lilypad Dashboard",
-		link: "/lilypad",
+		name: "Playground",
+		link: "/playground",
 	},
 	{
 		name: "Explore",
-		link: "/explore",
+		link: "/",
+	},
+	{
+		name: "My Modules",
+		link: "/module",
 	},
 ];
 

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { getPublicTemplates } from "../api/template";
 import { useEffect } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
+import { getTimeDifference } from "../utils/time";
 
 export default function Explore() {
 	return (
@@ -114,7 +115,7 @@ const RightComponent = () => {
 		);
 	}
 	return (
-		<Box sx={{ pl: 1, flex: 1 }}>
+		<Box sx={{ pl: 1, flex: 1, ml: 2 }}>
 			{data?.length > 0 &&
 				data.map((value) => (
 					<Box
@@ -154,7 +155,9 @@ const RightComponent = () => {
 							<Box sx={{ mt: 2, fontWeight: 600 }}>
 								{value.name} : <i>{value.user}</i>
 							</Box>
-							<Box sx={{ mt: 1 }}>Updated</Box>
+							<Box sx={{ mt: 1 }}>
+								Updated {getTimeDifference(value.updatedAt)}
+							</Box>
 							<Box
 								sx={{
 									mt: 2,

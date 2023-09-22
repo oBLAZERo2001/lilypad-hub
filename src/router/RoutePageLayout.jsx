@@ -22,7 +22,7 @@ export const RoutePageLayout = ({ children }) => {
 			<Box
 				sx={{
 					width: "100vw",
-					maxWidth: "1260px",
+					maxWidth: "1460px",
 
 					minHeight: "100vh",
 
