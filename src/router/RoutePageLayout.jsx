@@ -1,6 +1,7 @@
 import { Box } from "@mui/system";
 import { Outlet } from "react-router-dom";
 import TopNav from "../components/TopNav";
+import { useState } from "react";
 
 export const RoutePageLayout = ({ children }) => {
 	//   const { pathname } = useLocation();
@@ -21,7 +22,7 @@ export const RoutePageLayout = ({ children }) => {
 			<Box
 				sx={{
 					width: "100vw",
-					maxWidth: "1260px",
+					maxWidth: "1460px",
 
 					minHeight: "100vh",
 

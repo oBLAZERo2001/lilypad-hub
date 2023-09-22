@@ -1,6 +1,10 @@
-import { Checkbox } from "@mui/material";
+import { Checkbox, Chip, Skeleton } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
+import { getPublicTemplates } from "../api/template";
+import { useEffect } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
+import { getTimeDifference } from "../utils/time";
 
 export default function Explore() {
 	return (
@@ -11,7 +15,7 @@ export default function Explore() {
 					mt: 2,
 				}}
 			>
-				{/* right filter potion */}
+				{/* left filter potion */}
 				<Box>
 					<Box
 						sx={{
@@ -63,11 +67,128 @@ export default function Explore() {
 							))}
 					</Box>
 				</Box>
-				{/* left main potion */}
+				{/* right main potion */}
+				<RightComponent />
 			</Box>
 		</Box>
 	);
 }
+
+const RightComponent = () => {
+	const [searchParams] = useSearchParams();
+
+	const [data, setData] = useState([]);
+	const [loading, setloading] = useState(true);
+
+	let searchName = searchParams.get("name");
+
+	useEffect(() => {
+		const fun = async () => {
+			const res = await getPublicTemplates(searchName);
+			console.log(res);
+
+			if (res.data) {
+				setData(res.data);
+			}
+			setloading(false);
+		};
+		fun();
+	}, [searchName]);
+
+	if (loading) {
+		return (
+			<Box sx={{ pl: 1, flex: 1 }}>
+				<Skeleton
+					variant="rectangular"
+					width={"100%"}
+					height={"150px"}
+					sx={{ borderRadius: "5px" }}
+				/>
+				<br />
+				<Skeleton
+					variant="rectangular"
+					width={"100%"}
+					height={"150px"}
+					sx={{ borderRadius: "5px" }}
+				/>
+			</Box>
+		);
+	}
+	return (
+		<Box sx={{ pl: 1, flex: 1, ml: 2 }}>
+			{data?.length > 0 &&
+				data.map((value) => (
+					<Box
+						key={value.id}
+						sx={{
+							bgcolor: "#fff",
+							width: "100%",
+							minHeight: "150px",
+							borderRadius: "5px",
+
+							color: "#393f49",
+							fontSize: "14px",
+							fontWeight: 500,
+
+							display: "flex",
+							mb: 1,
+						}}
+					>
+						{/* image box */}
+						<Box
+							sx={{
+								height: "60px",
+								width: "60px",
+								m: 1,
+								mt: 2,
+							}}
+						>
+							<img
+								src="https://d1q6f0aelx0por.cloudfront.net/product-logos/library-alpine-logo.png"
+								height="100%"
+								width="100%"
+							/>
+						</Box>
+
+						{/* details box */}
+						<Box>
+							<Box sx={{ mt: 2, fontWeight: 600 }}>
+								{value.name} : <i>{value.user}</i>
+							</Box>
+							<Box sx={{ mt: 1 }}>
+								Updated {getTimeDifference(value.updatedAt)}
+							</Box>
+							<Box
+								sx={{
+									mt: 2,
+									whiteSpace: "nowrap",
+									overflow: "hidden",
+									textOverflow: "ellipsis",
+									maxWidth: "95%",
+								}}
+							>
+								{value.description} A minimal Docker image based on Alpine Linux
+								with a complete package index and only 5 MB in size!
+							</Box>
+
+							<Box
+								sx={{
+									mt: 2,
+								}}
+							>
+								{[1, 2, 3, 4].map((t) => (
+									<Chip
+										label={`Tag ${t}`}
+										sx={{ borderRadius: "4px", height: "24px", ml: 0.6 }}
+									/>
+								))}
+							</Box>
+						</Box>
+					</Box>
+				))}
+		</Box>
+	);
+};
 
 const FilterListData = [
 	{

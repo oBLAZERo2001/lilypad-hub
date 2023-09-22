@@ -1,4 +1,3 @@
-// import "../styles/Docker.css";
 import {
 	Avatar,
 	Box,
@@ -150,8 +149,8 @@ export const Lilypad = () => {
 	return (
 		<Box>
 			<Box display={"flex"}>
-				<Box sx={{ p: 2, flex: 1 }} mr={2}>
-					<h2 style={{ textAlign: "center" }}>Lilypad Jobs 🍃</h2>
+				<Box sx={{ p: 2, flex: 2 }} mr={2}>
+					<h2 style={{ textAlign: "center" }}>Lilypad Playground</h2>
 					<br />
 					<Box display={"flex"}>
 						{/* Image */}
@@ -411,65 +410,9 @@ export const Lilypad = () => {
 						</Box>
 					</Box>
 				</Box>
-				<Box sx={{ p: 2, flex: 1 }} width={"100%"}>
-					<Box sx={{ textAlign: "center" }}>
-						<h2>Saved Modules 💾</h2>
-						<p>Click to load modules.</p>
-					</Box>
-					<br />
-					<Box>
-						{modules &&
-							modules?.map((m, i) => {
-								return (
-									<ListItem
-										secondaryAction={
-											m._id !== 0 && (
-												<IconButton
-													edge="end"
-													aria-label="delete"
-													onClick={async () => {
-														await deleteTemplate(m._id);
-														gM();
-													}}
-												>
-													<AiFillDelete />
-												</IconButton>
-											)
-										}
-										key={i}
-									>
-										<ListItemAvatar
-											onClick={() => {
-												setTemplate((_) => {
-													return { ...m.payload.Spec };
-												});
-											}}
-										>
-											<Avatar>
-												<AiFillFolder />
-											</Avatar>
-										</ListItemAvatar>
-										<ListItemText
-											onClick={() => {
-												setTemplate((_) => {
-													return { ...m.payload.Spec };
-												});
-											}}
-											primary={m.name}
-											secondary={`${new Date(
-												m.createdAt
-											).toLocaleDateString()} ${new Date(
-												m.createdAt
-											).toLocaleTimeString()}`}
-										/>
-									</ListItem>
-								);
-							})}
-					</Box>
-				</Box>
 			</Box>
 			<Box sx={{ p: 2 }}>
-				<h2>Jobs 📃</h2>
+				<h2>History</h2>
 				<br />
 				{jobLoading ? (
 					<Box>
