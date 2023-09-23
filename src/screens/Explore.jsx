@@ -1,10 +1,13 @@
-import { Checkbox, Chip, Skeleton } from "@mui/material";
+import { Avatar, Checkbox, Skeleton } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
-import { getPublicTemplates } from "../api/template";
+import { cloneTemplate, getPublicTemplates } from "../api/template";
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { getTimeDifference } from "../utils/time";
+import { BiRightArrowAlt } from "react-icons/bi";
+import { PrimaryColor } from "../constants";
+import { toast } from "react-toastify";
 
 export default function Explore() {
 	return (
@@ -77,18 +80,34 @@ const RightComponent = () => {
 
 	let searchName = searchParams.get("name");
 
-	useEffect(() => {
-		const fun = async () => {
-			const res = await getPublicTemplates(searchName);
-			console.log(res);
+	const fun = async () => {
+		const res = await getPublicTemplates(searchName);
+		console.log(res);
 
-			if (res.data) {
-				setData(res.data);
-			}
-			setloading(false);
-		};
+		if (res.data) {
+			setData(res.data);
+		}
+		setloading(false);
+	};
+
+	useEffect(() => {
 		fun();
 	}, [searchName]);
+
+	const handleCloneClick = async (id) => {
+		const name = prompt("Enter module name");
+		if (!name || name === "") return;
+		const res = await cloneTemplate({
+			name,
+			id,
+		});
+		if (res) {
+			toast("Clone created", { type: "success" });
+		} else {
+			toast("Clone failed", { type: "error" });
+		}
+		fun();
+	};
 
 	if (loading) {
 		return (
@@ -125,7 +144,7 @@ const RightComponent = () => {
 							fontWeight: 500,
 							display: "flex",
 							mb: 1,
-							cursor: "pointer",
+							p: 2,
 						}}
 					>
 						{/* image box */}
@@ -137,38 +156,46 @@ const RightComponent = () => {
 								mt: 2,
 							}}
 						>
-							<img
+							<Avatar
 								src={value.img ? value.img : "/images/defaultModule.png"}
-								height="100%"
-								width="100%"
-								alt="library-img"
 								style={{
 									backgroundColor: !value.img ? "white" : "",
 									borderRadius: !value.img ? "5pc" : "",
+									height: "55px",
+									width: "55px",
 								}}
 							/>
 						</Box>
 						{/* details box */}
 						<Box>
-							<Box sx={{ mt: 2, fontWeight: 600 }}>{value.name}</Box>
-							<Box sx={{ mt: 0.5, fontWeight: 500, color: "#9f9f9f" }}>
+							<Box sx={{ mt: 2, fontWeight: 600, cursor: "pointer" }}>
+								{value.name}
+							</Box>
+							<Box
+								sx={{
+									mt: 0.5,
+									fontWeight: 500,
+									color: "#9f9f9f",
+									cursor: "pointer",
+								}}
+							>
 								{value.user.displayName}/{value.name}
 							</Box>
 							<Box
 								sx={{
 									mt: 0.5,
-									mb: 2,
+									mb: value.description ? 2 : 1,
 									whiteSpace: "nowrap",
 									overflow: "hidden",
 									textOverflow: "ellipsis",
 									maxWidth: "95%",
+									cursor: "pointer",
 								}}
 							>
 								{value.description}
 							</Box>
 							<Box
 								sx={{
-									mt: 1,
 									fontWeight: 400,
 									fontSize: "12px",
 									color: "#9f9f9f",
@@ -188,6 +215,22 @@ const RightComponent = () => {
 										sx={{ borderRadius: "4px", height: "24px", ml: 0.6 }}
 									/>
 								))} */}
+							</Box>
+							<Box
+								sx={{
+									display: "flex",
+									alignItems: "center",
+									"&:hover": {
+										color: PrimaryColor,
+									},
+									cursor: "pointer",
+								}}
+								onClick={() => handleCloneClick(value._id)}
+							>
+								<Box mr={0.5}>
+									<p>clone</p>
+								</Box>
+								<BiRightArrowAlt />
 							</Box>
 						</Box>
 					</Box>
