@@ -11,31 +11,50 @@ import { useNavigate } from "react-router-dom";
 import { PrimaryColor } from "../constants";
 import BgImage from "../assets/bgimage.png";
 import Logo from "../assets/logo.png";
-import { getUser } from "../api/user";
+import { getUser, getUserWithAddress } from "../api/user";
+import { connectWalletToSite, getWalletAddress } from "../utils/wallet";
 
 export default function Welcome() {
 	const navigate = useNavigate();
-	const { connectSite, signUser, connectedToWallet } = UseWallet();
+	const { signUser } = UseWallet();
 	const [displayName, setDisplayName] = useState();
 	const [signLoading, setSignLoading] = useState(false);
 	const [nameRequired, setNameRequired] = useState(false);
+	const [walletConnected, setWalletConnected] = useState(false);
 
 	async function handleGetUser() {
 		try {
-			const user = await getUser();
-			if (user) {
-				navigate("/");
+			const token = localStorage.getItem("token");
+			if (token && token !== "" && token !== "undefined") {
+				const user = await getUser();
+				if (user) {
+					navigate("/");
+				}
+			} else {
+				const address = await getWalletAddress();
+				const u = await getUserWithAddress(address);
+				if (u?.displayName) {
+					const r = await signUser();
+					if (r) {
+						navigate("/");
+					}
+				}
 			}
 		} catch (error) {
 			console.log(error);
 		}
 	}
 
-	useEffect(() => {
-		const token = localStorage.getItem("token");
-		if (token && token !== "" && token !== "undefined") {
-			handleGetUser();
+	async function connectSite() {
+		let connected = await connectWalletToSite();
+		setWalletConnected(connected);
+		if (connected) {
+			await handleGetUser();
 		}
+	}
+
+	useEffect(() => {
+		connectSite();
 	}, []);
 
 	return (
@@ -155,27 +174,27 @@ export default function Welcome() {
 						>
 							<Box sx={{ alignContent: "center" }}>
 								<Checkbox
-									checked={connectedToWallet}
+									checked={walletConnected}
 									// disabled
 									onClick={() => {}}
 									sx={{ p: 0.5, cursor: "default" }}
-									color={connectedToWallet ? "warning" : "primary"}
+									color={walletConnected ? "warning" : "primary"}
 								/>
 
-								{!connectedToWallet
+								{!walletConnected
 									? "Please connect wallet"
 									: "Connected to wallet"}
 							</Box>
-							{!connectedToWallet && (
+							{!walletConnected && (
 								<Box
 									sx={{ ...ButtonStyle, backgroundColor: PrimaryColor, my: 1 }}
-									onClick={connectSite}
+									onClick={connectWalletToSite}
 								>
 									Connect Wallet
 								</Box>
 							)}
 						</Box>
-						{connectedToWallet && (
+						{walletConnected && (
 							<Box
 								sx={{ ...ButtonStyle, backgroundColor: PrimaryColor, my: 1 }}
 								onClick={async () => {
