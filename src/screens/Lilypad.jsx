@@ -1,7 +1,4 @@
-import {
-	Box,
-	Skeleton,
-} from "@mui/material";
+import { Box, Skeleton } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { MdAddCircleOutline } from "react-icons/md";
 import { AiOutlineCloseCircle } from "react-icons/ai";
@@ -13,6 +10,7 @@ import { createLilypadJob, getLilypadJobs } from "../api/lilypad";
 import { LilyJobComponent } from "../components/LilyJobComponent";
 import { createTemplate, getTemplates } from "../api/template";
 import { CHAIN } from "../constants";
+import { useParams } from "react-router-dom";
 const {
 	Spec,
 	JobSpecDocker,
@@ -22,6 +20,9 @@ const {
 } = require("@daggle/bacalhau-js/models");
 
 export const Lilypad = () => {
+	const { id } = useParams();
+	console.log("id", id);
+
 	const [loading, setLoading] = useState(false);
 	const [jobLoading, setJobLoading] = useState(false);
 	const [moduleLoading, setModuleLoading] = useState(false);

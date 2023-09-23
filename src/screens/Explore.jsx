@@ -133,7 +133,7 @@ const RightComponent = () => {
 			{data?.length > 0 &&
 				data.map((value) => (
 					<Box
-						key={value.id}
+						key={value._id}
 						sx={{
 							bgcolor: "rgb(43, 49, 57)",
 							width: "100%",
