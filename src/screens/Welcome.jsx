@@ -97,7 +97,7 @@ export default function Welcome() {
 						mt: 4,
 					}}
 				>
-					<img src={Logo} alt="logo-img" height={"40px"} />
+					<img src={Logo} alt="logo-img" height={"50px"} />
 				</Box>
 				<Box
 					sx={{

@@ -3,7 +3,7 @@ import { Box } from "@mui/system";
 import React, { useState } from "react";
 import { getPublicTemplates } from "../api/template";
 import { useEffect } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { getTimeDifference } from "../utils/time";
 
 export default function Explore() {
@@ -33,12 +33,7 @@ export default function Explore() {
 										sx={{
 											fontSize: "18px",
 											color: "rgb(226, 226, 226)",
-											fontSize: "1rem",
-											letterSpacing: "0.02em",
-											lineHeight: "1.4375em",
-											fontFamily: "Roboto, system-ui, sans-serif",
 											fontWeight: "600",
-
 											mt: 2,
 										}}
 									>
@@ -121,17 +116,16 @@ const RightComponent = () => {
 					<Box
 						key={value.id}
 						sx={{
-							bgcolor: "#fff",
+							bgcolor: "rgb(43, 49, 57)",
 							width: "100%",
-							minHeight: "150px",
+							minHeight: "120px",
 							borderRadius: "5px",
-
-							color: "#393f49",
+							color: "white",
 							fontSize: "14px",
 							fontWeight: 500,
-
 							display: "flex",
 							mb: 1,
+							cursor: "pointer",
 						}}
 					>
 						{/* image box */}
@@ -144,31 +138,43 @@ const RightComponent = () => {
 							}}
 						>
 							<img
-								src="https://d1q6f0aelx0por.cloudfront.net/product-logos/library-alpine-logo.png"
+								src={value.img ? value.img : "/images/defaultModule.png"}
 								height="100%"
 								width="100%"
+								alt="library-img"
+								style={{
+									backgroundColor: !value.img ? "white" : "",
+									borderRadius: !value.img ? "5pc" : "",
+								}}
 							/>
 						</Box>
-
 						{/* details box */}
 						<Box>
-							<Box sx={{ mt: 2, fontWeight: 600 }}>
-								{value.name} : <i>{value.user}</i>
-							</Box>
-							<Box sx={{ mt: 1 }}>
-								Updated {getTimeDifference(value.updatedAt)}
+							<Box sx={{ mt: 2, fontWeight: 600 }}>{value.name}</Box>
+							<Box sx={{ mt: 0.5, fontWeight: 500, color: "#9f9f9f" }}>
+								{value.user.displayName}/{value.name}
 							</Box>
 							<Box
 								sx={{
-									mt: 2,
+									mt: 0.5,
+									mb: 2,
 									whiteSpace: "nowrap",
 									overflow: "hidden",
 									textOverflow: "ellipsis",
 									maxWidth: "95%",
 								}}
 							>
-								{value.description} A minimal Docker image based on Alpine Linux
-								with a complete package index and only 5 MB in size!
+								{value.description}
+							</Box>
+							<Box
+								sx={{
+									mt: 1,
+									fontWeight: 400,
+									fontSize: "12px",
+									color: "#9f9f9f",
+								}}
+							>
+								Updated {getTimeDifference(value.updatedAt)}
 							</Box>
 
 							<Box
@@ -176,12 +182,12 @@ const RightComponent = () => {
 									mt: 2,
 								}}
 							>
-								{[1, 2, 3, 4].map((t) => (
+								{/* {[1, 2, 3, 4].map((t) => (
 									<Chip
 										label={`Tag ${t}`}
 										sx={{ borderRadius: "4px", height: "24px", ml: 0.6 }}
 									/>
-								))}
+								))} */}
 							</Box>
 						</Box>
 					</Box>

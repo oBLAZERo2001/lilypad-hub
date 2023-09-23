@@ -38,7 +38,7 @@ export const RoutePageLayout = ({ children }) => {
 			sx={{
 				display: "flex",
 				justifyContent: "center",
-				backgroundImage: `rgb(26, 27, 30)`,
+				bgcolor: `rgb(26, 27, 30)`,
 			}}
 		>
 			<Box
