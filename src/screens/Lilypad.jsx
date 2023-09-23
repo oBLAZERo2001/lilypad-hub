@@ -365,32 +365,15 @@ export const Lilypad = () => {
 						}}
 					>
 						<p>Add Input</p>
-						</Box>
-					</Box>
-					<Box sx={{ display: "flex", justifyContent: "space-around" }}>
-						<Box width={"100%"} mr={1}>
-							<BlueButton
-								title={"Save Module"}
-								onClick={() => {
-									setSaveModuleDialogOpen(true);
-								}}
-								loading={moduleLoading}
-							/>
-						</Box>
-						<Box width={"100%"} ml={1}>
-							<BlueButton
-								title={"Submit Job"}
-								onClick={createJob}
-								loading={loading}
-							/>
-						</Box>
 					</Box>
 				</Box>
 				<Box sx={{ display: "flex", justifyContent: "space-around" }}>
 					<Box width={"100%"} mr={1}>
 						<BlueButton
 							title={"Save Module"}
-							onClick={sM}
+							onClick={() => {
+								setSaveModuleDialogOpen(true);
+							}}
 							loading={moduleLoading}
 						/>
 					</Box>
@@ -402,6 +385,7 @@ export const Lilypad = () => {
 						/>
 					</Box>
 				</Box>
+			</Box>
 			<SaveModuleDialog
 				open={saveModuleDialogOpen}
 				setOpen={setSaveModuleDialogOpen}
@@ -477,7 +461,7 @@ const SaveModuleDialog = ({ open, setOpen, template, sM }) => {
 						variant="contained"
 						disabled={!name || !description}
 					>
-						Conform
+						Confirm
 					</Button>
 					{/* )} */}
 				</DialogActions>

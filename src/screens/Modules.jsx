@@ -74,9 +74,6 @@ export default function Modules() {
 					modules?.map((m, i) => {
 						return (
 							<ListItem
-								onClick={() => {
-									navigate(`/playground/${m._id}`);
-								}}
 								sx={{
 									cursor: "pointer",
 								}}
@@ -148,7 +145,14 @@ export default function Modules() {
 													}}
 												/>
 											</IconButton>
-											<Popper id={idPoper} open={openPoper} anchorEl={anchorEl}>
+											<Popper
+												id={idPoper}
+												open={openPoper}
+												anchorEl={anchorEl}
+												sx={{
+													bgcolor: "#1A1B1E",
+												}}
+											>
 												<Box
 													sx={{
 														mt: 0.5,
@@ -171,6 +175,9 @@ export default function Modules() {
 
 														width: "200px",
 														cursor: "pointer",
+													}}
+													onClick={() => {
+														navigate(`/playground/${m._id}`);
 													}}
 												>
 													Open in Playground
