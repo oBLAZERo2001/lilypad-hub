@@ -1,15 +1,13 @@
-import { Box, Skeleton } from "@mui/material";
+import { Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { MdAddCircleOutline } from "react-icons/md";
-import { AiOutlineCloseCircle } from "react-icons/ai";
+import { AiOutlineDelete } from "react-icons/ai";
 import { BlueButton } from "../components/BlueButton";
 import Web3 from "web3";
 import LilypadInterface from "../contracts/Lilypad.json";
 import { getWalletAddress, switchChain } from "../utils/wallet";
 import { createLilypadJob, getLilypadJobs } from "../api/lilypad";
-import { LilyJobComponent } from "../components/LilyJobComponent";
-import { createTemplate, getTemplate, getTemplates } from "../api/template";
-import { CHAIN } from "../constants";
+import { createTemplate, getTemplate } from "../api/template";
+import { CHAIN, PrimaryColor } from "../constants";
 import { useParams } from "react-router-dom";
 const {
 	Spec,
@@ -21,11 +19,9 @@ const {
 
 export const Lilypad = () => {
 	const { id } = useParams();
-
 	const [loading, setLoading] = useState(false);
 	const [jobLoading, setJobLoading] = useState(false);
 	const [moduleLoading, setModuleLoading] = useState(false);
-	const [modules, setModules] = useState([]);
 	const [template, setTemplate] = useState(new Spec().toJson);
 	const [lilyPadJobs, setLilyPadJobs] = useState([]);
 
@@ -46,26 +42,6 @@ export const Lilypad = () => {
 		const resp = await getLilypadJobs();
 		setLilyPadJobs(resp);
 		setJobLoading(false);
-	}
-
-	async function gM() {
-		const resp = await getTemplates();
-		if (resp?.length === 0) {
-			resp.push({
-				_id: 0,
-				name: "Cowsay Sample Module🐮",
-				payload: new Payload({
-					spec: new Spec({
-						docker: new JobSpecDocker({
-							image: "grycap/cowsay:latest",
-							entrypoint: ["/usr/games/cowsay", "Welcome to Daggle🥳"],
-						}),
-					}),
-				}).toJson,
-				createdAt: new Date(),
-			});
-		}
-		setModules(resp);
 	}
 
 	const data = new Spec({
@@ -127,14 +103,13 @@ export const Lilypad = () => {
 			payload,
 			name,
 		});
-		await gM();
 		setModuleLoading(false);
 	}
 
 	async function gMwID(id) {
 		const response = await getTemplate(id);
 		console.log(response);
-		if(response.data) {
+		if (response.data) {
 			setTemplate((_) => {
 				return { ...response.data.payload.Spec };
 			});
@@ -142,7 +117,6 @@ export const Lilypad = () => {
 	}
 
 	useEffect(() => {
-		gM();
 		gJ();
 		if (id) {
 			console.log(id);
@@ -152,304 +126,249 @@ export const Lilypad = () => {
 	}, [id]);
 
 	return (
-		<Box>
-			<Box display={"flex"}>
-				<Box sx={{ p: 2, flex: 2 }} mr={2}>
-					<h2 style={{ textAlign: "center" }}>Lilypad Playground</h2>
-					<br />
-					<Box display={"flex"}>
-						{/* Image */}
-						<Box maxWidth="50vw" mr={2}>
-							<Box mb={1}>
-								<h5>Image*</h5>
-							</Box>
-							<Box maxWidth="20vw" display={"flex"}>
-								<Box className="param search-container">
-									<input
-										type="url"
-										id="search"
-										placeholder="blazer/dedocker"
-										value={template?.docker?.image ? template.docker.image : ""}
-										onChange={(e) =>
-											setTemplate((prevState) => ({
-												...prevState,
-												docker: {
-													...prevState.docker,
-													image: e.target.value,
-												},
-											}))
-										}
-									/>
-								</Box>
-							</Box>
+		<Box
+			sx={{
+				display: "flex",
+				flexDirection: "column",
+				alignItems: "center",
+				justifyContent: "center",
+			}}
+		>
+			<Box
+				sx={{
+					p: 2,
+					flex: 2,
+					maxWidth: "550px",
+				}}
+			>
+				<h2 style={{ textAlign: "center" }}>Lilypad Playground</h2>
+				<br />
+				<Box display={"flex"}>
+					{/* Image */}
+					<Box mr={2} width={"100%"}>
+						<Box mb={1}>
+							<h5>Image*</h5>
 						</Box>
-						{/* Working Directory */}
-						<Box maxWidth="50vw" mb={2}>
-							<Box mb={1}>
-								<h5>Working Directory</h5>
-							</Box>
-							<Box maxWidth="20vw" display={"flex"}>
-								<Box className="param search-container">
-									<input
-										type="url"
-										id="workingdir"
-										placeholder="/inputs"
-										value={
-											template?.docker?.WorkingDirectory
-												? template.docker.WorkingDirectory
-												: ""
-										}
-										onChange={(e) => {
-											setTemplate((prevState) => ({
-												...prevState,
-												docker: {
-													...prevState.docker,
-													WorkingDirectory: e.target.value,
-												},
-											}));
-										}}
-									/>
-								</Box>
+						<Box display={"flex"}>
+							<Box className="param search-container" flex={1}>
+								<input
+									type="url"
+									id="search"
+									placeholder="fastchat:v0.0.1"
+									value={template?.docker?.image ? template.docker.image : ""}
+									onChange={(e) =>
+										setTemplate((prevState) => ({
+											...prevState,
+											docker: {
+												...prevState.docker,
+												image: e.target.value,
+											},
+										}))
+									}
+								/>
 							</Box>
 						</Box>
 					</Box>
-					{/* Inputs */}
-					<Box maxWidth="50vw" mr={2} mb={3}>
-						<Box mb={1} display={"flex"}>
-							<Box mr={1}>
-								<h5>Inputs</h5>
-							</Box>
-
-							<MdAddCircleOutline
-								style={{ cursor: "pointer" }}
-								onClick={() => {
-									setTemplate((prevState) => ({
-										...prevState,
-										inputs: prevState.inputs.concat([
-											{ StorageSource: "IPFS", key: Date.now() },
-										]),
-									}));
-								}}
-							/>
+					{/* Working Directory */}
+					<Box mb={2} width={"100%"}>
+						<Box mb={1}>
+							<h5>Working Directory</h5>
 						</Box>
-						{template?.inputs &&
-							template?.inputs?.map((inp, iI) => (
-								<Box
-									maxWidth="30vw"
-									sx={{
-										display: "flex",
-										alignItems: "center",
+						<Box display={"flex"}>
+							<Box className="param search-container" flex={1}>
+								<input
+									type="url"
+									id="workingdir"
+									placeholder="/inputs"
+									value={
+										template?.docker?.WorkingDirectory
+											? template.docker.WorkingDirectory
+											: ""
+									}
+									onChange={(e) => {
+										setTemplate((prevState) => ({
+											...prevState,
+											docker: {
+												...prevState.docker,
+												WorkingDirectory: e.target.value,
+											},
+										}));
 									}}
-									key={inp.key}
-									mb={1}
-								>
-									<Box mr={2}>
-										<select
-											name="storage-spec"
-											className="storage-select search-container"
-											value={inp.StorageSource}
-											onChange={(e) => {
-												setTemplate((prevState) => {
-													prevState.inputs[iI].StorageSource = e.target.value;
-													return {
-														...prevState,
-													};
-												});
-											}}
-										>
-											<option value="IPFS">IPFS</option>
-											<option value="URLDownload">URL</option>
-										</select>
-									</Box>
-									<Box className="param search-container" mr={2}>
-										<input
-											type="url"
-											placeholder="URL/CID"
-											value={inp.StorageSource === "IPFS" ? inp.cid : inp.url}
-											onInput={(e) => {
-												setTemplate((prevState) => {
-													prevState.inputs[iI].cid = e.target.value;
-													prevState.inputs[iI].url = e.target.value;
-													return {
-														...prevState,
-													};
-												});
-											}}
-										/>
-									</Box>
-									<Box className="param search-container" mr={2}>
-										<input
-											type="text"
-											placeholder="Save to directory"
-											value={inp.path}
-											onInput={(e) => {
-												setTemplate((prevState) => {
-													prevState.inputs[iI].path = e.target.value;
-													return {
-														...prevState,
-													};
-												});
-											}}
-										/>
-									</Box>
-									<Box>
-										<AiOutlineCloseCircle
-											style={{ cursor: "pointer" }}
-											onClick={() => {
-												let oldInputs = [...template.inputs];
-												oldInputs.splice(iI, 1);
-												setTemplate((prevState) => {
-													return {
-														...prevState,
-														inputs: [...oldInputs],
-													};
-												});
-											}}
-										/>
-									</Box>
-								</Box>
-							))}
-					</Box>
-					{/* Entrypoints */}
-					<Box maxWidth="50vw" mb={3}>
-						<Box mb={1} display={"flex"}>
-							<Box mr={1}>
-								<h5>Entrypoint</h5>
+								/>
 							</Box>
-
-							<MdAddCircleOutline
-								style={{ cursor: "pointer" }}
-								onClick={() => {
+						</Box>
+					</Box>
+				</Box>
+				{/* Entrypoints */}
+				<Box mb={3}>
+					<Box mb={1} display={"flex"}>
+						<Box mr={1}>
+							<h5>Entrypoint</h5>
+						</Box>
+					</Box>
+					<Box
+						sx={{
+							display: "flex",
+							alignItems: "center",
+						}}
+						mb={1}
+					>
+						<Box
+							className="param search-container"
+							sx={{
+								width: "100%",
+							}}
+						>
+							<input
+								type="text"
+								id={`entrypoint-i`}
+								placeholder="Command"
+								value={template.docker.entrypoint.join(" ")}
+								onInput={(e) => {
+									let en = e.target.value.split(" ");
 									setTemplate((prevState) => ({
 										...prevState,
 										docker: {
 											...prevState.docker,
-											entrypoint: prevState.docker.entrypoint.concat([""]),
+											entrypoint: en,
 										},
 									}));
 								}}
 							/>
 						</Box>
-						{template?.docker?.entrypoint &&
-							template.docker.entrypoint.map((d, i) => (
-								<Box
-									maxWidth="30vw"
-									sx={{
-										display: "flex",
-										alignItems: "center",
-									}}
-									key={i}
-									mb={1}
-								>
-									<Box className="param search-container" mr={2}>
-										<input
-											type="text"
-											id={`entrypoint-${i}`}
-											placeholder="Command"
-											value={d}
-											onInput={(e) => {
-												let en = [...template.docker.entrypoint];
-												en[i] = e.target.value;
-												setTemplate((prevState) => ({
-													...prevState,
-													docker: {
-														...prevState.docker,
-														entrypoint: en,
-													},
-												}));
-											}}
-										/>
-									</Box>
-									<Box>
-										<AiOutlineCloseCircle
-											style={{ cursor: "pointer" }}
-											onClick={() => {
-												let oE = [...template.docker.entrypoint];
-												oE.splice(i, 1);
-												setTemplate((prevState) => {
-													return {
-														...prevState,
-														docker: {
-															...prevState.docker,
-															entrypoint: oE,
-														},
-													};
-												});
-											}}
-										/>
-									</Box>
-								</Box>
-							))}
-					</Box>
-					{/* Replicas */}
-					<Box maxWidth="50vw" mb={2}>
-						<Box mb={1}>
-							<h5>Replicas</h5>
-						</Box>
-						<Box maxWidth="20vw" display={"flex"}>
-							<Box className="param search-container">
-								<input
-									style={{ cursor: "no-drop" }}
-									type="text"
-									placeholder="1"
-									value={"1"}
-									disabled={true}
-								/>
-							</Box>
-						</Box>
-					</Box>
-					<Box sx={{ display: "flex", justifyContent: "space-around" }}>
-						<Box width={"100%"} mr={1}>
-							<BlueButton
-								title={"Save Module"}
-								onClick={sM}
-								loading={moduleLoading}
-							/>
-						</Box>
-						<Box width={"100%"} ml={1}>
-							<BlueButton
-								title={"Submit Job"}
-								onClick={createJob}
-								loading={loading}
-							/>
-						</Box>
 					</Box>
 				</Box>
-			</Box>
-			<Box sx={{ p: 2 }}>
-				<h2>History</h2>
-				<br />
-				{jobLoading ? (
-					<Box>
-						{Array.from({ length: 10 }).map((_, i) => (
-							<Skeleton
-								variant="rectangular"
-								sx={{ my: 1 }}
-								height={"75px"}
-								key={i}
-							/>
+				{/* Inputs */}
+				<Box mb={3}>
+					<Box mb={1} display={"flex"}>
+						<Box mr={1}>
+							<h5>Inputs</h5>
+						</Box>
+					</Box>
+					{template?.inputs &&
+						template?.inputs?.map((inp, iI) => (
+							<Box
+								sx={{
+									display: "flex",
+									alignItems: "center",
+								}}
+								key={inp.key}
+								mb={1}
+							>
+								<Box mr={2}>
+									<select
+										name="storage-spec"
+										className="storage-select search-container"
+										value={inp.StorageSource}
+										onChange={(e) => {
+											setTemplate((prevState) => {
+												prevState.inputs[iI].StorageSource = e.target.value;
+												return {
+													...prevState,
+												};
+											});
+										}}
+									>
+										<option value="IPFS">IPFS</option>
+										<option value="URLDownload">URL</option>
+									</select>
+								</Box>
+								<Box className="param search-container" mr={2}>
+									<input
+										type="url"
+										placeholder="URL/CID"
+										value={inp.StorageSource === "IPFS" ? inp.cid : inp.url}
+										onInput={(e) => {
+											setTemplate((prevState) => {
+												prevState.inputs[iI].cid = e.target.value;
+												prevState.inputs[iI].url = e.target.value;
+												return {
+													...prevState,
+												};
+											});
+										}}
+									/>
+								</Box>
+								<Box className="param search-container" mr={2}>
+									<input
+										type="text"
+										placeholder="Save to directory"
+										value={inp.path}
+										onInput={(e) => {
+											setTemplate((prevState) => {
+												prevState.inputs[iI].path = e.target.value;
+												return {
+													...prevState,
+												};
+											});
+										}}
+									/>
+								</Box>
+								<Box
+									sx={{
+										"&:hover": {
+											color: "red",
+										},
+									}}
+								>
+									<AiOutlineDelete
+										style={{
+											cursor: "pointer",
+										}}
+										onClick={() => {
+											let oldInputs = [...template.inputs];
+											oldInputs.splice(iI, 1);
+											setTemplate((prevState) => {
+												return {
+													...prevState,
+													inputs: [...oldInputs],
+												};
+											});
+										}}
+									/>
+								</Box>
+							</Box>
 						))}
+					<Box
+						sx={{
+							mt: 2,
+							backgroundColor: PrimaryColor,
+							color: "black",
+							fontWeight: 500,
+							p: 1,
+							textAlign: "center",
+							borderRadius: "4px",
+							cursor: "pointer",
+							width: "fit-content",
+						}}
+						onClick={() => {
+							setTemplate((prevState) => ({
+								...prevState,
+								inputs: prevState.inputs.concat([
+									{ StorageSource: "IPFS", key: Date.now() },
+								]),
+							}));
+						}}
+					>
+						<p>Add Input</p>
 					</Box>
-				) : (
-					<Box>
-						<table>
-							<thead>
-								<tr>
-									<th>Id</th>
-									<th>Result</th>
-									<th>Transaction</th>
-									<th>Created</th>
-								</tr>
-							</thead>
-							<tbody>
-								{lilyPadJobs &&
-									lilyPadJobs.map((job, i) => (
-										<LilyJobComponent key={i} job={job} />
-									))}
-							</tbody>
-						</table>
+				</Box>
+				<Box sx={{ display: "flex", justifyContent: "space-around" }}>
+					<Box width={"100%"} mr={1}>
+						<BlueButton
+							title={"Save Module"}
+							onClick={sM}
+							loading={moduleLoading}
+						/>
 					</Box>
-				)}
+					<Box width={"100%"} ml={1}>
+						<BlueButton
+							title={"Test Job"}
+							onClick={createJob}
+							loading={loading}
+						/>
+					</Box>
+				</Box>
 			</Box>
 		</Box>
 	);

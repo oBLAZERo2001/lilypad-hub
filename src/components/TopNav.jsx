@@ -38,6 +38,15 @@ export default function TopNav() {
 					>
 						<img src={Logo} alt="logo-img" height={"40px"} />
 					</Box>
+					<SearchComponent />
+				</Box>
+				{/* right position */}
+				<Box
+					sx={{
+						display: "flex",
+						alignItems: "center",
+					}}
+				>
 					<Box
 						sx={{
 							display: "flex",
@@ -56,15 +65,6 @@ export default function TopNav() {
 							</Box>
 						))}
 					</Box>
-				</Box>
-				{/* right position */}
-				<Box
-					sx={{
-						display: "flex",
-						alignItems: "center",
-					}}
-				>
-					<SearchComponent />
 					<IconButton
 						title="Log out"
 						onClick={() => {
