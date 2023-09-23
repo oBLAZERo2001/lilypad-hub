@@ -93,6 +93,10 @@ const Options = [
 		name: "Modules",
 		link: "/module",
 	},
+	{
+		name: "History",
+		link: "/history",
+	},
 ];
 
 const RightNavs = {

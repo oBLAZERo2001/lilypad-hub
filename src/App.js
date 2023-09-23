@@ -6,6 +6,7 @@ import Explore from "./screens/Explore";
 import Modules from "./screens/Modules";
 import { RoutePageLayout } from "./router/RoutePageLayout";
 import { Lilypad } from "./screens/Lilypad";
+import HistoryTable from "./components/History";
 
 function App() {
 	return (
@@ -16,6 +17,7 @@ function App() {
 					<Route path="playground" exact element={<Lilypad />} />
 					<Route path="playground/:id" exact element={<Lilypad />} />
 					<Route path="module" exact element={<Modules />} />
+					<Route path="history" exact element={<HistoryTable />} />
 				</Route>
 
 				<Route path="welcome" exact element={<Welcome />} />
