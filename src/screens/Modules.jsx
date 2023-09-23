@@ -9,11 +9,9 @@ import {
 	Popper,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import {
-	AiOutlineEdit,
-} from "react-icons/ai";
+import { AiOutlineEdit } from "react-icons/ai";
 import { cloneTemplate, deleteTemplate, getTemplates } from "../api/template";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { EditModelDialog } from "../components/EditModelDialog";
@@ -23,6 +21,7 @@ export default function Modules() {
 	const [modules, setModules] = useState();
 	const [open, setOpen] = useState(false);
 	const [editModel, seteditModel] = useState({});
+	const navigate = useNavigate();
 
 	const [anchorEl, setAnchorEl] = useState(null);
 	const openPoper = Boolean(anchorEl);
@@ -75,6 +74,12 @@ export default function Modules() {
 					modules?.map((m, i) => {
 						return (
 							<ListItem
+								onClick={() => {
+									navigate(`/playground/${m._id}`);
+								}}
+								sx={{
+									cursor: "pointer",
+								}}
 								secondaryAction={
 									m._id !== 0 && (
 										<Box

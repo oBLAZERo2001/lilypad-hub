@@ -14,6 +14,7 @@ function App() {
 				<Route element={<RoutePageLayout />}>
 					<Route path="/" exact element={<Explore />} />
 					<Route path="playground" exact element={<Lilypad />} />
+					<Route path="playground/:id" exact element={<Lilypad />} />
 					<Route path="module" exact element={<Modules />} />
 				</Route>
 
