@@ -19,6 +19,7 @@ export class NftStorageHttpService {
 			return assetUrl;
 		} catch (error) {
 			console.log(error);
+			return false;
 		}
 	}
 
@@ -41,6 +42,7 @@ export class NftStorageHttpService {
 			return url;
 		} catch (error) {
 			console.log(error);
+			return false;
 		}
 	}
 }

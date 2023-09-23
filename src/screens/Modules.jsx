@@ -19,17 +19,8 @@ import { Link } from "react-router-dom";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { EditModelDialog } from "../components/EditModelDialog";
 
-const {
-	Spec,
-	JobSpecDocker,
-	PublisherSpec,
-	Payload,
-	StorageSpec,
-} = require("@daggle/bacalhau-js/models");
-
 export default function Modules() {
 	const [modules, setModules] = useState();
-	// const [template, editTemplate] = useState([]);
 	const [open, setOpen] = useState(false);
 	const [editModel, seteditModel] = useState({});
 
@@ -96,6 +87,7 @@ export default function Modules() {
 												sx={{
 													mr: 2,
 												}}
+												color="warning"
 											>
 												<AiOutlineEdit />
 											</IconButton>
@@ -133,7 +125,12 @@ export default function Modules() {
 						);
 					})}
 			</Box>
-			<EditModelDialog open={open} setOpen={setOpen} model={editModel} />
+			<EditModelDialog
+				open={open}
+				setOpen={setOpen}
+				model={editModel}
+				reGet={gM}
+			/>
 		</Box>
 	);
 }

@@ -13,9 +13,14 @@ import {
 	TextField,
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
+import { updateTemplate } from "../api/template";
+import { NftStorageHttpService } from "../utils/nftStorage";
 
-export const EditModelDialog = ({ open, setOpen, model }) => {
+export const EditModelDialog = ({ open, setOpen, model, reGet }) => {
+	const nftStoage = new NftStorageHttpService();
 	const [img, setImg] = useState("");
+	const [newImgUrl, setNewImgUrl] = useState("");
 	const [imgSelect, setImgSelect] = useState("");
 	const [visibility, setVisibility] = useState("");
 	const [loading, setLoading] = useState(false);
@@ -23,11 +28,23 @@ export const EditModelDialog = ({ open, setOpen, model }) => {
 	const fileInput = useRef();
 
 	const handleClose = () => {
+		setImgSelect("");
+		setNewImgUrl("");
+		reGet();
 		setOpen(false);
 	};
 
 	const handleUpdate = async () => {
 		try {
+			const res = await updateTemplate({
+				img: newImgUrl ? `https://ipfs.io/ipfs${newImgUrl}` : img,
+				visibility,
+				id: model._id,
+			});
+			if (res?.ok) {
+				toast("Successfully updated thee module 🥳", { type: "success" });
+				handleClose();
+			}
 		} catch (error) {
 			console.log(error);
 		}
@@ -39,6 +56,35 @@ export const EditModelDialog = ({ open, setOpen, model }) => {
 	}, [model]);
 
 	console.log(imgSelect);
+
+	const handleUploadImage = async (e) => {
+		setLoading(true);
+		e.preventDefault();
+		if (imgSelect) {
+			const res = await nftStoage.pinFileToIPFS(imgSelect);
+			if (res) {
+				setNewImgUrl(res);
+			}
+		} else {
+			toast("Kindly select an Image to upload", { type: "error" });
+		}
+		setLoading(false);
+	};
+
+	const handleImageChange = (e) => {
+		const file = e.target.files[0];
+		if (file) {
+			if (file.size <= 20 * 1024 * 1024) {
+				// 20MB limit
+				setImgSelect(file);
+				setNewImgUrl("");
+			} else {
+				setImgSelect(null);
+				toast("Image size exceeds 20MB", { type: "error" });
+			}
+		}
+	};
+
 	return (
 		<div>
 			<Dialog open={open} onClose={() => {}}>
@@ -72,12 +118,10 @@ export const EditModelDialog = ({ open, setOpen, model }) => {
 						<input
 							ref={fileInput}
 							type="file"
+							accept="image/*"
 							multiple={false}
 							style={{ display: "none" }}
-							// value={imgSelect}
-							onChange={(e) => {
-								setImgSelect(e.target.files[0]);
-							}}
+							onChange={handleImageChange}
 						/>
 					</div>
 					<Box
@@ -86,6 +130,29 @@ export const EditModelDialog = ({ open, setOpen, model }) => {
 						}}
 					>
 						{imgSelect?.name && `Selected image : ${imgSelect.name}`}
+						{imgSelect?.name && newImgUrl === "" && !loading && (
+							<Button
+								variant="contained"
+								size="small"
+								onClick={handleUploadImage}
+							>
+								Push Image
+							</Button>
+						)}
+						{loading && (
+							<Button variant="contained" size="small">
+								Pushing...
+							</Button>
+						)}
+					</Box>
+					<Box
+						sx={{
+							mb: 1,
+							fontSize: "small",
+							color: "#43940d",
+						}}
+					>
+						{newImgUrl && "Images Ready to update"}
 					</Box>
 					<FormControl fullWidth>
 						{/* <InputLabel id="demo-simple-select-label">Visibility</InputLabel> */}

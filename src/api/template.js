@@ -68,10 +68,11 @@ export const cloneTemplate = async function (data) {
 	}
 };
 export const updateTemplate = async function (data) {
+	console.log("updating", data);
 	try {
 		let token = localStorage.getItem("token");
 		const response = await axios.patch(
-			SERVER_URL + "/template/updateTemplate",
+			SERVER_URL + `/template/updateTemplate/${data.id}`,
 			data,
 			{
 				headers: {
@@ -81,7 +82,10 @@ export const updateTemplate = async function (data) {
 			}
 		);
 		if (response.status === 200) {
-			return response.data;
+			return {
+				data: response.data,
+				ok: true,
+			};
 		}
 	} catch (error) {
 		console.log(error.message);

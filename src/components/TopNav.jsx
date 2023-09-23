@@ -49,6 +49,7 @@ export default function TopNav() {
 							onClick={() => {
 								navigate(link);
 							}}
+							key={name}
 						>
 							{name}
 						</Box>
