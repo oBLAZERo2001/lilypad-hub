@@ -16,6 +16,7 @@ import { MdOutlineDeleteOutline } from "react-icons/md";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { EditModelDialog } from "../components/EditModelDialog";
 import { toast } from "react-toastify";
+import EmptyImage from "../assets/empty.png";
 
 export default function Modules() {
 	const [modules, setModules] = useState();
@@ -61,10 +62,19 @@ export default function Modules() {
 			<br />
 			<Box>
 				{modules?.length === 0 && (
-					<Box>
-						Your modules is emplty.{" "}
-						<Link to="/playground" relative="path">
-							create new modules.
+					<Box
+						sx={{
+							display: "flex",
+							alignItems: "center",
+							justifyContent: "center",
+							flexDirection: "column",
+						}}
+					>
+						<Box>
+							<img src={EmptyImage} alt="emptyimage" />
+						</Box>
+						<Link to="/playground" relative="path" style={{ color: "grey" }}>
+							Create New Modules.
 						</Link>
 					</Box>
 				)}
