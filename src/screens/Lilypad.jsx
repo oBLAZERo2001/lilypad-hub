@@ -1,24 +1,17 @@
 import {
-	Avatar,
 	Box,
-	IconButton,
-	ListItem,
-	ListItemAvatar,
-	ListItemText,
 	Skeleton,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { MdAddCircleOutline } from "react-icons/md";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { BlueButton } from "../components/BlueButton";
-import { useNavigate } from "react-router-dom";
 import Web3 from "web3";
 import LilypadInterface from "../contracts/Lilypad.json";
 import { getWalletAddress, switchChain } from "../utils/wallet";
 import { createLilypadJob, getLilypadJobs } from "../api/lilypad";
-import { AiFillDelete, AiFillFolder } from "react-icons/ai";
 import { LilyJobComponent } from "../components/LilyJobComponent";
-import { createTemplate, deleteTemplate, getTemplates } from "../api/template";
+import { createTemplate, getTemplates } from "../api/template";
 import { CHAIN } from "../constants";
 const {
 	Spec,
@@ -35,7 +28,6 @@ export const Lilypad = () => {
 	const [modules, setModules] = useState([]);
 	const [template, setTemplate] = useState(new Spec().toJson);
 	const [lilyPadJobs, setLilyPadJobs] = useState([]);
-	const navigate = useNavigate();
 
 	async function gJ() {
 		if (!template.docker.image) {
