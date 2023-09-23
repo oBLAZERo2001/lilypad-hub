@@ -115,3 +115,21 @@ export const getPublicTemplates = async function (searchName) {
 		console.log("temp", error.message);
 	}
 };
+
+export const getTemplate = async function (id) {
+	try {
+		let token = localStorage.getItem("token");
+		const response = await axios.get(SERVER_URL + `/template/${id}`, {
+			headers: {
+				Authorization: "Bearer " + token,
+			},
+		});
+		if (response.status === 200) {
+			return {
+				data: response.data,
+			};
+		}
+	} catch (error) {
+		console.log("temp", error.message);
+	}
+};

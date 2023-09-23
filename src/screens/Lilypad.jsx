@@ -8,7 +8,7 @@ import LilypadInterface from "../contracts/Lilypad.json";
 import { getWalletAddress, switchChain } from "../utils/wallet";
 import { createLilypadJob, getLilypadJobs } from "../api/lilypad";
 import { LilyJobComponent } from "../components/LilyJobComponent";
-import { createTemplate, getTemplates } from "../api/template";
+import { createTemplate, getTemplate, getTemplates } from "../api/template";
 import { CHAIN } from "../constants";
 import { useParams } from "react-router-dom";
 const {
@@ -21,7 +21,6 @@ const {
 
 export const Lilypad = () => {
 	const { id } = useParams();
-	console.log("id", id);
 
 	const [loading, setLoading] = useState(false);
 	const [jobLoading, setJobLoading] = useState(false);
@@ -45,7 +44,6 @@ export const Lilypad = () => {
 		}
 		setJobLoading(true);
 		const resp = await getLilypadJobs();
-		console.log("resp", resp);
 		setLilyPadJobs(resp);
 		setJobLoading(false);
 	}
@@ -133,11 +131,25 @@ export const Lilypad = () => {
 		setModuleLoading(false);
 	}
 
+	async function gMwID(id) {
+		const response = await getTemplate(id);
+		console.log(response);
+		if(response.data) {
+			setTemplate((_) => {
+				return { ...response.data.payload.Spec };
+			});
+		}
+	}
+
 	useEffect(() => {
 		gM();
 		gJ();
+		if (id) {
+			console.log(id);
+			gMwID(id);
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [id]);
 
 	return (
 		<Box>
