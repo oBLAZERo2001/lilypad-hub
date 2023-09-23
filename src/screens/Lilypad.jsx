@@ -1,4 +1,13 @@
-import { Box, Skeleton } from "@mui/material";
+import {
+	Box,
+	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
+	Skeleton,
+	TextField,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { MdAddCircleOutline } from "react-icons/md";
 import { AiOutlineCloseCircle } from "react-icons/ai";
@@ -11,6 +20,7 @@ import { LilyJobComponent } from "../components/LilyJobComponent";
 import { createTemplate, getTemplate, getTemplates } from "../api/template";
 import { CHAIN } from "../constants";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 const {
 	Spec,
 	JobSpecDocker,
@@ -117,16 +127,21 @@ export const Lilypad = () => {
 		setLoading(false);
 	}
 
-	async function sM() {
-		const name = prompt("Enter module name");
+	const [saveModuleDialogOpen, setSaveModuleDialogOpen] = useState(false);
+
+	async function sM(name, description) {
 		if (!name || name === "") return;
+		if (!description || description === "") return;
+		setSaveModuleDialogOpen(false);
 		setModuleLoading(true);
 		let payload = new Payload({ spec: data });
 		payload = payload.toJson;
 		await createTemplate({
 			payload,
 			name,
+			description,
 		});
+		toast("Successfully Saved module 🥳", { type: "success" });
 		await gM();
 		setModuleLoading(false);
 	}
@@ -402,7 +417,9 @@ export const Lilypad = () => {
 						<Box width={"100%"} mr={1}>
 							<BlueButton
 								title={"Save Module"}
-								onClick={sM}
+								onClick={() => {
+									setSaveModuleDialogOpen(true);
+								}}
 								loading={moduleLoading}
 							/>
 						</Box>
@@ -451,6 +468,86 @@ export const Lilypad = () => {
 					</Box>
 				)}
 			</Box>
+			<SaveModuleDialog
+				open={saveModuleDialogOpen}
+				setOpen={setSaveModuleDialogOpen}
+				template={template}
+				sM={sM}
+			/>
 		</Box>
+	);
+};
+
+const SaveModuleDialog = ({ open, setOpen, template, sM }) => {
+	const [name, setName] = useState("");
+	const [description, setDescription] = useState("");
+
+	useEffect(() => {
+		if (template?.name) setName(template?.name);
+		if (template?.description) setDescription(template?.description);
+	}, [template]);
+
+	const handleClose = () => {
+		setOpen(false);
+	};
+
+	return (
+		<div>
+			<Dialog open={open} onClose={() => {}}>
+				<DialogTitle
+					sx={{
+						display: "flex",
+						justifyContent: "center",
+					}}
+				>
+					{"Module Details"}
+				</DialogTitle>
+				<DialogContent>
+					<TextField
+						size="small"
+						placeholder="Name"
+						value={name}
+						onChange={(e) => {
+							setName(e.target.value);
+						}}
+						fullWidth
+					/>
+					<br />
+					<br />
+					<TextField
+						size="small"
+						multiline
+						minRows={2}
+						placeholder="Description"
+						value={description}
+						onChange={(e) => {
+							setDescription(e.target.value);
+						}}
+						fullWidth
+					/>
+				</DialogContent>
+				<DialogActions>
+					<Button autoFocus onClick={handleClose} variant="contained">
+						Close
+					</Button>
+					{/* {loading ? (
+						<Button color="primary" variant="contained">
+							Loading...
+						</Button>
+					) : ( */}
+					<Button
+						onClick={() => {
+							sM(name, description);
+						}}
+						autoFocus
+						variant="contained"
+						disabled={!name || !description}
+					>
+						Conform
+					</Button>
+					{/* )} */}
+				</DialogActions>
+			</Dialog>
+		</div>
 	);
 };
