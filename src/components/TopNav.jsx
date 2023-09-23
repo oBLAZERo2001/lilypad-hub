@@ -1,7 +1,9 @@
-import { Box } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import Logo from "../assets/logo.png";
 import { useNavigate } from "react-router";
 import { SearchComponent } from "./SearchComponent";
+
+import { MdOutlineLogout } from "react-icons/md";
 
 export default function TopNav() {
 	const navigate = useNavigate();
@@ -56,7 +58,23 @@ export default function TopNav() {
 					</Box>
 				</Box>
 				{/* right position */}
-				<SearchComponent />
+				<Box
+					sx={{
+						display: "flex",
+						alignItems: "center",
+					}}
+				>
+					<SearchComponent />
+					<IconButton
+						title="Log out"
+						onClick={() => {
+							localStorage.clear();
+							navigate("/welcome");
+						}}
+					>
+						<MdOutlineLogout style={{ color: "white" }} />
+					</IconButton>
+				</Box>
 			</Box>
 		</Box>
 	);
