@@ -10,9 +10,6 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
-	AiFillDelete,
-	AiFillFolder,
-	AiOutlineDelete,
 	AiOutlineEdit,
 } from "react-icons/ai";
 import { cloneTemplate, deleteTemplate, getTemplates } from "../api/template";

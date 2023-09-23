@@ -1,7 +1,7 @@
 import "../styles/JobComponent.css";
 import React, { useEffect, useState } from "react";
 import { IoRefreshOutline } from "react-icons/io5";
-import { CHAIN, PrimaryGrey } from "../constants";
+import { CHAIN } from "../constants";
 import { Box } from "@mui/material";
 import { toast } from "react-toastify";
 import { getLilypadJob } from "../api/lilypad";
