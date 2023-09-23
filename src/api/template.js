@@ -54,12 +54,16 @@ export const deleteTemplate = async function (id) {
 export const cloneTemplate = async function (data) {
 	try {
 		let token = localStorage.getItem("token");
-		const response = await axios.post(SERVER_URL + "/template/clone", data, {
-			headers: {
-				"Content-Type": `application/json`,
-				Authorization: "Bearer " + token,
-			},
-		});
+		const response = await axios.post(
+			SERVER_URL + `/template/clone/${data.id}`,
+			data,
+			{
+				headers: {
+					"Content-Type": `application/json`,
+					Authorization: "Bearer " + token,
+				},
+			}
+		);
 		if (response.status === 200) {
 			return response.data;
 		}
