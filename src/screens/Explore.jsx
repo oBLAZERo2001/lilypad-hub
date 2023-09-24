@@ -8,6 +8,8 @@ import { getTimeDifference } from "../utils/time";
 import { BiRightArrowAlt } from "react-icons/bi";
 import { PrimaryColor } from "../constants";
 import { toast } from "react-toastify";
+import { FaRegClone } from "react-icons/fa";
+import { ExploreFilters, ExploreSort } from "../components/ExploreComponents";
 
 export default function Explore() {
 	return (
@@ -19,55 +21,11 @@ export default function Explore() {
 				}}
 			>
 				{/* left filter potion */}
-				<Box
-					sx={{
-						minWidth: "175px",
-					}}
-				>
-					<Box
-						sx={{
-							fontSize: "18px",
-							fontWeight: "500",
-						}}
-					>
-						Filters
-					</Box>
-					<Box>
-						{FilterListData?.length > 0 &&
-							FilterListData.map((sub) => (
-								<Box key={sub.name}>
-									<Box
-										sx={{
-											color: "rgb(226, 226, 226)",
-											mt: 2,
-										}}
-									>
-										{sub.name}
-									</Box>
-									{sub.list?.length > 0 &&
-										sub.list.map((list) => (
-											<Box
-												sx={{
-													display: "flex",
-													alignItems: "center",
-													color: "rgb(245, 245, 245)",
-													mt: 1,
-												}}
-												key={list}
-											>
-												<Checkbox
-													sx={{
-														color: "rgb(226, 226, 226)",
-														py: 0.5,
-													}}
-												/>
-												{list}
-											</Box>
-										))}
-								</Box>
-							))}
-					</Box>
+				<Box>
+					<ExploreFilters />
+					<ExploreSort />
 				</Box>
+
 				{/* right main potion */}
 				<RightComponent />
 			</Box>
@@ -171,8 +129,31 @@ const RightComponent = () => {
 						</Box>
 						{/* details box */}
 						<Box>
-							<Box sx={{ mt: 2, fontWeight: 600, cursor: "pointer" }}>
+							<Box
+								sx={{
+									mt: 2,
+									fontWeight: 600,
+									cursor: "pointer",
+
+									display: "flex",
+									alignItems: "center",
+								}}
+							>
 								{value.name}
+								<Box
+									title="Number of Clones"
+									style={{
+										marginLeft: "32px",
+										marginRight: "6px",
+										height: "14px",
+										width: "14px",
+									}}
+								>
+									<FaRegClone />
+								</Box>
+								<span title="Number of Clones">
+									{value.cloneCount ? value.cloneCount : 0}
+								</span>
 							</Box>
 							<Box
 								sx={{
@@ -236,14 +217,3 @@ const RightComponent = () => {
 		</Box>
 	);
 };
-
-const FilterListData = [
-	{
-		name: "Images",
-		list: ["Docker", "Wasm"],
-	},
-	{
-		name: "Sort by",
-		list: ["Date", "Clones"],
-	},
-];
