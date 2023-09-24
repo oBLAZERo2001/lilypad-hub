@@ -1,5 +1,5 @@
 import { Box, Checkbox } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 export function ExploreFilters() {
@@ -72,6 +72,14 @@ export function ExploreSort() {
 	const [sortOrder, setOrder] = useState("new");
 	const [searchParams, setSearchParams] = useSearchParams();
 	const name = searchParams.get("name");
+
+	useEffect(() => {
+		setSearchParams({
+			sortOrder: "new",
+			sortType: "date",
+			name: name ? name : "",
+		});
+	}, []);
 
 	return (
 		<Box>
