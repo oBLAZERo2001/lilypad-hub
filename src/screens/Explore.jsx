@@ -19,7 +19,11 @@ export default function Explore() {
 				}}
 			>
 				{/* left filter potion */}
-				<Box>
+				<Box
+					sx={{
+						minWidth: "175px",
+					}}
+				>
 					<Box
 						sx={{
 							fontSize: "18px",
@@ -34,9 +38,7 @@ export default function Explore() {
 								<Box key={sub.name}>
 									<Box
 										sx={{
-											fontSize: "18px",
 											color: "rgb(226, 226, 226)",
-											fontWeight: "600",
 											mt: 2,
 										}}
 									>
@@ -49,6 +51,7 @@ export default function Explore() {
 													display: "flex",
 													alignItems: "center",
 													color: "rgb(245, 245, 245)",
+													mt: 1,
 												}}
 												key={list}
 											>
@@ -185,11 +188,6 @@ const RightComponent = () => {
 								sx={{
 									mt: 0.5,
 									mb: value.description ? 2 : 1,
-									whiteSpace: "nowrap",
-									overflow: "hidden",
-									textOverflow: "ellipsis",
-									maxWidth: "95%",
-									cursor: "pointer",
 								}}
 							>
 								{value.description}
@@ -241,11 +239,11 @@ const RightComponent = () => {
 
 const FilterListData = [
 	{
-		name: "Products",
-		list: ["Images", "Extensions"],
+		name: "Images",
+		list: ["Docker", "Wasm"],
 	},
 	{
-		name: "Trusted Content",
-		list: ["some one", "somether two"],
+		name: "Sort by",
+		list: ["Date", "Clones"],
 	},
 ];
