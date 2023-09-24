@@ -102,30 +102,6 @@ export default function History() {
 								lilyPadJobs
 									.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 									.map((row) => {
-										let job;
-										let refreshing = false;
-
-										async function gJ() {
-											try {
-												if (refreshing) return;
-												refreshing = true;
-												const jobResolved = await getLilypadJob(row._id);
-												console.log(jobResolved);
-												if (jobResolved.status === 200) {
-													job = jobResolved.data;
-													toast("Successfully refreshed.", { type: "success" });
-												} else {
-													throw Error();
-												}
-												refreshing = false;
-											} catch (e) {
-												refreshing = false;
-												toast("Some error occured, try again.", {
-													type: "warning",
-												});
-											}
-										}
-
 										return (
 											<TableRow
 												hover
@@ -141,38 +117,7 @@ export default function History() {
 															{column.id === "result" ? (
 																<Box>{row.job_id}</Box>
 															) : column.id === "check" ? (
-																<Box
-																	onClick={() => {
-																		if (job?.result) {
-																			window.open(
-																				`https://ipfs.io/ipfs/${row.result}`,
-																				"_blank"
-																			);
-																		} else {
-																			gJ();
-																		}
-																	}}
-																	style={{
-																		cursor: "pointer",
-																	}}
-																>
-																	{job?.result ? (
-																		job.result.includes(" ") ? (
-																			job.result
-																		) : (
-																			"View Result"
-																		)
-																	) : refreshing ? (
-																		<Skeleton
-																			variant="rectangular"
-																			width={"100%"}
-																			height={"10px"}
-																			sx={{ borderRadius: "5px" }}
-																		/>
-																	) : (
-																		"Check Result"
-																	)}
-																</Box>
+																<CheckerComponent row={row} />
 															) : column.id === "view" ? (
 																<Box
 																	onClick={() => {
@@ -233,3 +178,66 @@ export default function History() {
 		</Box>
 	);
 }
+
+const CheckerComponent = ({ row }) => {
+	const [refreshing, setRefreshing] = useState(false);
+	const [job, setJob] = useState(false);
+	async function gJ() {
+		try {
+			if (refreshing) return;
+			setRefreshing(true);
+			const jobResolved = await getLilypadJob(row._id);
+			console.log(jobResolved);
+			if (jobResolved.status === 200) {
+				setJob(jobResolved.data);
+				toast("Successfully refreshed.", { type: "success" });
+			} else {
+				throw Error();
+			}
+			setRefreshing(false);
+		} catch (e) {
+			setRefreshing(false);
+			toast("Some error occured, try again.", {
+				type: "warning",
+			});
+		}
+	}
+
+	useEffect(() => {
+		if (row) {
+			setJob(row);
+		}
+	}, [row]);
+
+	return (
+		<Box
+			onClick={() => {
+				if (job?.result) {
+					window.open(`https://ipfs.io/ipfs/${job.result}`, "_blank");
+				} else {
+					gJ();
+				}
+			}}
+			style={{
+				cursor: "pointer",
+			}}
+		>
+			{job?.result ? (
+				job.result.includes(" ") ? (
+					job.result
+				) : (
+					"View Result"
+				)
+			) : refreshing ? (
+				<Skeleton
+					variant="rectangular"
+					width={"100%"}
+					height={"10px"}
+					sx={{ borderRadius: "5px" }}
+				/>
+			) : (
+				"Check Result"
+			)}
+		</Box>
+	);
+};
