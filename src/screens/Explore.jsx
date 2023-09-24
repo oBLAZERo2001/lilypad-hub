@@ -40,9 +40,21 @@ const RightComponent = () => {
 	const [loading, setloading] = useState(true);
 
 	let searchName = searchParams.get("name");
+	let sortType = searchParams.get("sortType");
+	let sortOrder = searchParams.get("sortOrder");
+
+	console.log(
+		"out",
+		"searchName",
+		searchName,
+		"sortType",
+		sortType,
+		"sortOrder",
+		sortOrder
+	);
 
 	const fun = async () => {
-		const res = await getPublicTemplates(searchName);
+		const res = await getPublicTemplates(searchName, sortType, sortOrder);
 		console.log(res);
 
 		if (res.data) {
@@ -53,7 +65,7 @@ const RightComponent = () => {
 
 	useEffect(() => {
 		fun();
-	}, [searchName]);
+	}, [searchName, sortType, sortOrder]);
 
 	const handleCloneClick = async (id) => {
 		const name = prompt("Enter module name");
@@ -141,7 +153,7 @@ const RightComponent = () => {
 							>
 								{value.name}
 								<Box
-									title="Number of Clones"
+									title="Number of clones"
 									style={{
 										marginLeft: "32px",
 										marginRight: "6px",
@@ -151,7 +163,7 @@ const RightComponent = () => {
 								>
 									<FaRegClone />
 								</Box>
-								<span title="Number of Clones">
+								<span title="Number of clones">
 									{value.cloneCount ? value.cloneCount : 0}
 								</span>
 							</Box>

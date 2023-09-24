@@ -22,9 +22,10 @@ export function SearchComponent({
 					placeholder={title}
 					onInput={(e) => {
 						setSearchName(e.target.value);
-						setSearchParams({
-							name: e.target.value,
-						});
+
+						searchParams.set("name", e.target.value);
+						// const set
+						setSearchParams(searchParams);
 					}}
 					value={searchName}
 				/>

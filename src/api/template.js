@@ -95,11 +95,27 @@ export const updateTemplate = async function (data) {
 		console.log(error.message);
 	}
 };
-export const getPublicTemplates = async function (searchName) {
+export const getPublicTemplates = async function (
+	searchName,
+	sortType,
+	sortOrder
+) {
 	try {
+		console.log(
+			"searchName",
+			searchName,
+			"sortType",
+			sortType,
+			"sortOrder",
+			sortOrder
+		);
+
 		let token = localStorage.getItem("token");
 		const response = await axios.get(
-			SERVER_URL + `/template/public?name=${searchName ? searchName : ""}`,
+			SERVER_URL +
+				`/template/public?sortType=${sortType ? sortType : "date"}&sortOrder=${
+					sortOrder ? sortOrder : "new"
+				}&name=${searchName ? searchName : ""}`,
 			{
 				headers: {
 					Authorization: "Bearer " + token,

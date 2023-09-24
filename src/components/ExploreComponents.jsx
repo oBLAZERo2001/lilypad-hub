@@ -1,5 +1,6 @@
 import { Box, Checkbox } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 export function ExploreFilters() {
 	return (
@@ -67,6 +68,11 @@ export function ExploreFilters() {
 }
 
 export function ExploreSort() {
+	const [sortType, setSortType] = useState("date");
+	const [sortOrder, setOrder] = useState("new");
+	const [searchParams, setSearchParams] = useSearchParams();
+	const name = searchParams.get("name");
+
 	return (
 		<Box>
 			<Box>
@@ -91,6 +97,20 @@ export function ExploreSort() {
 							color: "rgb(226, 226, 226)",
 							py: 0.5,
 						}}
+						checked={sortOrder === "new" && sortType === "date"}
+						onChange={(e) => {
+							if (e.target.checked) {
+								setSortType("date");
+								setOrder("new");
+								// searchParams.set("sortOrder", "new");
+								// searchParams.set("sortType", "date");
+								setSearchParams({
+									sortOrder: "new",
+									sortType: "date",
+									name: name ? name : "",
+								});
+							}
+						}}
 					/>
 					Newest First
 				</Box>
@@ -106,6 +126,20 @@ export function ExploreSort() {
 							color: "rgb(226, 226, 226)",
 							py: 0.5,
 						}}
+						checked={sortOrder === "old" && sortType === "date"}
+						onChange={(e) => {
+							if (e.target.checked) {
+								setSortType("date");
+								setOrder("old");
+								// searchParams.set("sortOrder", "old");
+								// searchParams.set("sortType", "date");
+								setSearchParams({
+									sortOrder: "old",
+									sortType: "date",
+									name: name ? name : "",
+								});
+							}
+						}}
 					/>
 					Oldest First
 				</Box>
@@ -120,6 +154,20 @@ export function ExploreSort() {
 						sx={{
 							color: "rgb(226, 226, 226)",
 							py: 0.5,
+						}}
+						checked={sortType === "clones"}
+						onChange={(e) => {
+							if (e.target.checked) {
+								setSortType("clones");
+								setOrder("old");
+
+								// searchParams.set("sortType", "clones");
+								setSearchParams({
+									sortOrder: "new",
+									sortType: "clones",
+									name: name ? name : "",
+								});
+							}
 						}}
 					/>
 					Highest Clones
