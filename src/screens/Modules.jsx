@@ -26,6 +26,8 @@ export default function Modules() {
 
 	const [anchorEl, setAnchorEl] = useState(null);
 	const openPoper = Boolean(anchorEl);
+	const [poperId, setPoperId] = useState("");
+
 	const idPoper = openPoper ? "simple-popper" : undefined;
 
 	async function gM() {
@@ -142,6 +144,7 @@ export default function Modules() {
 												edge="end"
 												aria-label="delete"
 												onClick={(event) => {
+													setPoperId(m._id);
 													setAnchorEl(anchorEl ? null : event.currentTarget);
 												}}
 												sx={{
@@ -155,44 +158,6 @@ export default function Modules() {
 													}}
 												/>
 											</IconButton>
-											<Popper
-												id={idPoper}
-												open={openPoper}
-												anchorEl={anchorEl}
-												sx={{
-													bgcolor: "#1A1B1E",
-												}}
-											>
-												<Box
-													sx={{
-														mt: 0.5,
-														border: 1,
-														p: 1,
-
-														width: "200px",
-														cursor: "pointer",
-													}}
-													onClick={() => {
-														handleCloneClick(m._id);
-													}}
-												>
-													Clone
-												</Box>
-												<Box
-													sx={{
-														border: 1,
-														p: 1,
-
-														width: "200px",
-														cursor: "pointer",
-													}}
-													onClick={() => {
-														navigate(`/playground/${m._id}`);
-													}}
-												>
-													Open in Playground
-												</Box>
-											</Popper>
 										</Box>
 									)
 								}
@@ -234,6 +199,44 @@ export default function Modules() {
 				model={editModel}
 				reGet={gM}
 			/>
+			<Popper
+				id={idPoper}
+				open={openPoper}
+				anchorEl={anchorEl}
+				sx={{
+					bgcolor: "#1A1B1E",
+				}}
+			>
+				<Box
+					sx={{
+						mt: 0.5,
+						border: 1,
+						p: 1,
+
+						width: "200px",
+						cursor: "pointer",
+					}}
+					onClick={() => {
+						handleCloneClick(poperId);
+					}}
+				>
+					Clone
+				</Box>
+				<Box
+					sx={{
+						border: 1,
+						p: 1,
+
+						width: "200px",
+						cursor: "pointer",
+					}}
+					onClick={() => {
+						navigate(`/playground/${poperId}`);
+					}}
+				>
+					Open in Playground
+				</Box>
+			</Popper>
 		</Box>
 	);
 }
