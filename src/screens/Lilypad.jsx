@@ -15,7 +15,7 @@ import LilypadInterface from "../contracts/Lilypad.json";
 import { getWalletAddress, switchChain } from "../utils/wallet";
 import { createLilypadJob, getLilypadJobs } from "../api/lilypad";
 import { createTemplate, getTemplate } from "../api/template";
-import { CHAIN, PrimaryColor } from "../constants";
+import { CONTRACT_ADDRESS, PrimaryColor } from "../constants";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 const {
@@ -77,7 +77,7 @@ export const Lilypad = () => {
 		const web3 = new Web3(window.ethereum);
 		const contract = new web3.eth.Contract(
 			LilypadInterface.abi,
-			CHAIN.contract_address
+			CONTRACT_ADDRESS
 		);
 		const currentAddress = await getWalletAddress();
 		// Gas Calculation
