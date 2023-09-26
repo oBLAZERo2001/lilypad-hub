@@ -21,8 +21,9 @@ export const ChainsConfig = {
 		nativeCurrency: { name: "Filecoin", symbol: "FIL", decimals: 18 },
 		rpcUrls: ["https://api.node.glif.io"],
 		blockExplorerUrls: ["https://fvm.starboard.ventures/explorer/"],
-		contract_address: "0x8cd0f1Bc3636c546DD822e6D8c1a5b5FABe10aDE",
 	},
 };
+
+export const CONTRACT_ADDRESS = "0x8cd0f1Bc3636c546DD822e6D8c1a5b5FABe10aDE";
 
 export const CHAIN = ChainsConfig[process.env.REACT_APP_CHAIN];
